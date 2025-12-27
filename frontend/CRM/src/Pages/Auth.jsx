@@ -1,7 +1,10 @@
 import React from "react";
 import { useState } from "react";
+import apiCall from "../utilities/axios";
+import { useNavigate } from "react-router-dom";
 
-const Auth = () => {
+const Auth = ({setToken}) => {
+  const navigate = useNavigate()
   const [mode, setMode] = useState("login");
   const [formData, setFormData] = useState({
     firstName: "",
@@ -15,18 +18,32 @@ const Auth = () => {
     setFormData({...formData,[e.target.name] : e.target.value})
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(formData);
-    setFormData({
-    firstName: "",
-    lastName: "",
-    userName: "",
-    email: "",
-    password: "",
-    })
-
-    // need to work with axios tomorrow to make the request.
+        // need to work with axios tomorrow to make the request.
+    try {
+    const response = await apiCall.post(`user/${mode === 'login'? 'login' : 'signup'}`,formData) 
+      console.log(response.data.token);
+      localStorage.setItem("token",response.data.token)
+      setToken(response.data.token)
+      alert(response.data.response);
+      if(localStorage.getItem('token') !== ''){
+        navigate('/dashboard')
+      }else {
+        navigate('/auth')
+      }
+    } catch (error) {
+      console.log(error);
+      setFormData({
+      firstName: "",
+      lastName: "",
+      userName: "",
+      email: "",
+      password: "",
+      })
+      alert(`Failed to ${mode === 'login' ? 'login' : 'signup'}. ${error}`)
+    }
   };
   return (
     <>

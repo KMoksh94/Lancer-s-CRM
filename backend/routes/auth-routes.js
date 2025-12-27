@@ -3,6 +3,7 @@ const router = express.Router()
 const jwt = require('jsonwebtoken')
 const {encryptPass, decryptPass} = require('../utilities/bcrypt.js');
 const User = require('../database-connection/user-model.js');
+const requireLogin = require('../middlewares/requireLogin.js');
 
 router.post('/signup', async (req,res)=>{
 try {
@@ -31,13 +32,17 @@ router.post('/login', async (req,res)=> {
   if(!plainPass){return res.status(401).json({response : `Incorrect Password!`})}
   findUser.password = undefined
   const token = jwt.sign({
-    exp: Math.floor(Date.now() / 1000) + (60 * 60 *24),
+    // exp: Math.floor(Date.now() / 1000) + (60 * 60 *24),
     user : findUser},
     process.env.JWT_KEY)
   return res.status(200).json({response : `User successfully logged in!`, token})
   } catch (error) {
     console.log(error);
   }
+})
+
+router.get('/getUser', requireLogin, async(req,res)=> {
+  return res.status(200).json({response : req.user})
 })
 
 
