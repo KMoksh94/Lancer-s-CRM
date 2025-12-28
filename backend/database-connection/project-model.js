@@ -31,9 +31,18 @@ const projectSchema = new mongoose.Schema({
   },
   user : {
     type : ObjectId,
-    ref : 'User'
-  }
+    ref : 'User',
+    index : true
+  },
+  isDeleted : {
+    type : Boolean,
+    default : false
+  },
+  timestamps : true
 })
 
+// compound index for faster query searches when both arguements are used in the same query, 1 for ascending order -1 for descending 
+projectSchema.index({user : 1, status : 1})
+projectSchema.index({user : 1, clientName : 1})
 const Project = mongoose.model('Project', projectSchema)
 module.exports = Project

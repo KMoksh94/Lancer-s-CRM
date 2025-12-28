@@ -13,20 +13,26 @@ const clientSchema = new mongoose.Schema({
     type : String,
     reuqired : true
   },
-  projectList : [
-    {
-      type : ObjectId,
-      ref : 'Project'
-    }
-  ],
+  projectList : {
+    type : [{type : ObjectId, ref : 'Project'}],
+    defualt : []
+    },
   notes : {
     type : String
   },
   user : {
     type : ObjectId,
-    ref : 'User'
-  }
+    ref : 'User',
+    index : true
+  },
+    isDeleted : {
+      type : Boolean,
+      default : false
+    },
+  timestamps:true
 })
+
+clientSchema.index({user : 1, companyName : 1})
 
 const Client = mongoose.model('Client', clientSchema)
 module.exports = Client

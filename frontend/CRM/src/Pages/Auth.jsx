@@ -21,7 +21,6 @@ const Auth = ({setToken}) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(formData);
-        // need to work with axios tomorrow to make the request.
     try {
     const response = await apiCall.post(`user/${mode === 'login'? 'login' : 'signup'}`,formData) 
       console.log(response.data.token);

@@ -35,7 +35,7 @@ router.post('/login', async (req,res)=> {
     // exp: Math.floor(Date.now() / 1000) + (60 * 60 *24),
     user : findUser},
     process.env.JWT_KEY)
-  return res.status(200).json({response : `User successfully logged in!`, token})
+  return res.status(200).json({response : `User successfully logged in!`, token, user : findUser})
   } catch (error) {
     console.log(error);
   }
