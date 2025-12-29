@@ -26,8 +26,10 @@ const userSchema = new mongoose.Schema({
     type : Boolean,
     default : false
   },
-  timestamps : true
-})
+},
+{timestamps : true})
+
+userSchema.index({userName : 1, isDeleted : 1})
 
 const User = mongoose.model("User", userSchema)
 module.exports = User

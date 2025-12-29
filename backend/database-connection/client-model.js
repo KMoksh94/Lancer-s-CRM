@@ -29,10 +29,10 @@ const clientSchema = new mongoose.Schema({
       type : Boolean,
       default : false
     },
-  timestamps:true
-})
+},{timestamps:true})
 
 clientSchema.index({user : 1, companyName : 1})
+clientSchema.index({user :1, isDeleted : 1})
 
 const Client = mongoose.model('Client', clientSchema)
 module.exports = Client

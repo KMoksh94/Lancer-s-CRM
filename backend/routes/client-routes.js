@@ -3,6 +3,17 @@ const Client = require('../database-connection/client-model')
 const requireLogin = require('../middlewares/requireLogin')
 const router = express.Router()
 
+
+router.get('/all-clients', requireLogin,async(req,res)=> {
+  try {
+  const allClients = await Client.find({user : req.user._id, isDeleted: false})
+  return res.status(200).json({response : `Fetched Successfully`, clients : allClients})  
+  } catch (error) {
+  console.log(error);
+  return res.status(500).json({error : `Internal Server Error`})
+  }
+})
+
 router.post('/add-client', requireLogin,async(req,res)=>{
 try {
   const {name,companyName,email,notes} = req.body
@@ -15,7 +26,7 @@ try {
   if(findClient){return res.status(400).json({response : `A client with this name from same company or email already exists`})}
   const client = new Client({name,companyName,email,notes, user:req.user._id})
   await client.save()
-  return res.status(201).json({response : `Client successfully created!`})
+  return res.status(201).json({response : `Client successfully created!`,client})
 } catch (error) {
   console.log(error);
   return res.status(500).json({error : `Internal Server Error`})
@@ -31,7 +42,7 @@ router.post('/edit-client/:clientId', requireLogin, async(req,res)=> {
   if(companyName){updateData.companyName = companyName}
   if(email){updateData.email = email}
   if(!clientId){return res.status(400).json({response : `Kindly provide Client Id!`})}
-  const requiredClient = await Client.findOne({_id:clientId, user: req.user._id})
+  const requiredClient = await Client.findOne({_id:clientId, user: req.user._id, isDeleted : false})
   if(!requiredClient){return res.status(400).json({response : `User does not have any client with such Id!`})}
   const findClient = await Client.findOne(
     {user : req.user._id,
@@ -41,7 +52,7 @@ router.post('/edit-client/:clientId', requireLogin, async(req,res)=> {
       {email}
     ]})
   if(findClient){return res.status(400).json({response : `A client with this name from same company or email already exists`})}
-  const updateClient = await Client.findOneAndUpdate({_id:clientId, user: req.user._id},
+  const updateClient = await Client.findOneAndUpdate({_id:clientId, user: req.user._id, isDeleted : false},
     updateData,
   {new : true})
   return res.status(200).json({response : `Client Updated Successfully!`, client : updateClient})
@@ -68,8 +79,9 @@ router.get('/client-details/:clientId', requireLogin, async(req,res)=>{
 try {
   const {clientId} = req.params
   const requiredClient = await Client.findOne({
-    _id : clientId, user : req.user._id
+    _id : clientId, user : req.user._id, isDeleted : false
   })
+  // need to get all the projects as well
   return res.status(200).json({response : `Client found successfully`, client : requiredClient})
 } catch (error) {
   console.log(error);

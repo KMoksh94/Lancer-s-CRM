@@ -4,11 +4,15 @@ import Navbar from '../Components/Navbar'
 import Topbar from '../Components/Topbar'
 import Loader from '../Components/loader'
 import apiCall from '../utilities/axios'
+import ClientPage from '../Components/ClientPage'
+import MainDashboardPage from '../Components/MainDashboardPage'
+import ProjetcsPage from '../Components/ProjetcsPage'
+import ClientDetails from '../Components/ClientDetails'
 const Dashboard = ({token,setToken}) => {
   const [currentTab,setCurrentTab] = useState('Dashboard')
   const [user,setUser] = useState(null)
   const [loadingUser,setLoadingUser] = useState(true)
-  
+  const [clientId,setClientId] = useState(null)
   console.log("Dashboard rendered, loadingUser =", loadingUser);
 
   useEffect(()=>{
@@ -32,7 +36,15 @@ const Dashboard = ({token,setToken}) => {
     {loadingUser ? <Loader></Loader> : 
     <div className='bg-gray-100 flex'>
       <Navbar currentTab = {currentTab} setCurrentTab = {setCurrentTab}></Navbar>
+      <div className='w-full flex flex-col'>
       <Topbar currentTab={currentTab} user={user} setUser={setUser} setToken={setToken}></Topbar>
+      <div className='w-full'>
+        {currentTab === 'Clients' && <ClientPage setCurrentTab={setCurrentTab} setClientId={setClientId}/>}
+        {currentTab === 'Dashboard' && <MainDashboardPage/>}
+        {currentTab === 'Projects' && <ProjetcsPage/>}
+        {currentTab === 'Client Details' && <ClientDetails clientId={clientId}/>}
+      </div>
+      </div>
     </div>
     }
     </>
