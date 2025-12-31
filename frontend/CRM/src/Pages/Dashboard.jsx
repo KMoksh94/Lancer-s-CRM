@@ -42,7 +42,7 @@ const Dashboard = ({token,setToken}) => {
         {currentTab === 'Clients' && <ClientPage setCurrentTab={setCurrentTab} setClientId={setClientId}/>}
         {currentTab === 'Dashboard' && <MainDashboardPage/>}
         {currentTab === 'Projects' && <ProjetcsPage/>}
-        {currentTab === 'Client Details' && <ClientDetails clientId={clientId}/>}
+        {currentTab === 'Client Details' && <ClientDetails clientId={clientId} setCurrentTab={setCurrentTab}/>}
       </div>
       </div>
     </div>

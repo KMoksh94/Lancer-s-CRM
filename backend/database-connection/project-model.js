@@ -20,8 +20,9 @@ const projectSchema = new mongoose.Schema({
     required : true
   },
   amount : {
-    type : String,
-    required : true
+    type : Number,
+    required : true,
+    min : 0
   },
   paymentDate : {
     type : Date
@@ -46,5 +47,6 @@ const projectSchema = new mongoose.Schema({
 projectSchema.index({user : 1, status : 1})
 projectSchema.index({user : 1, clientName : 1})
 projectSchema.index({user :1, isDeleted : 1})
+projectSchema.index({name :1,clientName :1,user :1})
 const Project = mongoose.model('Project', projectSchema)
 module.exports = Project

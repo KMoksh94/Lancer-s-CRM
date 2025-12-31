@@ -5,11 +5,13 @@ import { useState } from 'react';
 import AddModal from './add-modal';
 import { useEffect } from 'react';
 import apiCall from '../utilities/axios';
+import deleteClient from '../utilities/deleteClient';
 
 const ClientPage = ({setCurrentTab,setClientId}) => {
   const [openModal,setOpenModal] = useState(false)
   const [clientList,setClientList] = useState([])
   const [newClientCreated,setNewClientCreated] = useState(false)
+  const [clientDeleted,setClientDeleted] = useState(false)
   const fetchClients = async ()=> {
     try {
     const response = await apiCall.get('/clients/all-clients')
@@ -24,6 +26,13 @@ const ClientPage = ({setCurrentTab,setClientId}) => {
   useEffect(()=> {
     fetchClients()
   },[])
+
+  useEffect(()=>{
+    if(!clientDeleted)return
+    fetchClients()
+    setClientDeleted(false)
+  },[clientDeleted])
+
   useEffect(()=>{
     if(!newClientCreated)return
     fetchClients()
@@ -107,21 +116,21 @@ const ClientPage = ({setCurrentTab,setClientId}) => {
               </tr>
               {clientList.map(client=>{
                 return (<tr className="hover:bg-gray-200 transition border-b border-b-gray-300">
-                  <td className='hidden'>{client._id}</td>
-                  <td className='hidden'>{client.user}</td>
+                  <td className='hidden'>{client?._id}</td>
+                  <td className='hidden'>{client?.user}</td>
                 <td 
                 onClick={()=> {
                   setCurrentTab('Client Details')
-                  setClientId(client._id)
+                  setClientId(client?._id)
                 }}
                 className="px-4 py-3 text-sm text-gray-800 hover:underline cursor-pointer">
-                  {client.name}
+                  {client?.name}
                 </td>
                 <td className="px-4 py-3 text-sm text-gray-700">
-                  {client.companyName}
+                  {client?.companyName}
                 </td>
                 <td className="px-4 py-3 text-sm text-gray-700">
-                  {client.email}
+                  {client?.email}
                 </td>
                 <td className="px-4 py-3 text-sm text-center">
                   <span className="px-2 py-1 text-xs font-medium rounded bg-indigo-100 text-indigo-600">
@@ -129,17 +138,30 @@ const ClientPage = ({setCurrentTab,setClientId}) => {
                   </span>
                 </td>
                 <td className="px-4 py-3 text-sm text-gray-600">
-                  {new Date(client.createdAt).toLocaleDateString('en-GB',{
+                  {new Date(client?.createdAt).toLocaleDateString('en-GB',{
                     day : "2-digit",
                     month : 'short',
                     year : 'numeric'
                   })}
                 </td>
                 <td className="px-4 py-3 text-center space-x-1">
-                  <button className=" bg-indigo-600 text-white rounded py-1 px-3 text-sm cursor-pointer hover:bg-indigo-700">
+                  <button className=" bg-indigo-600 text-white rounded py-1 px-3 text-sm cursor-pointer hover:bg-indigo-700"
+                  onClick={()=> {
+                  setCurrentTab('Client Details')
+                  setClientId(client?._id)
+                }}
+                  >
                     View
                   </button>
-                  <button className="bg-red-600 text-white rounded py-1 px-3 text-sm cursor-pointer hover:bg-red-700">
+                  <button className="bg-red-600 text-white rounded py-1 px-3 text-sm cursor-pointer hover:bg-red-700"
+                  onClick={async ()=>{
+                    const confirmation = confirm(`Are you sure? Related Projects will also be deleted!`)
+                    if(confirmation){
+                      await deleteClient(client?._id)
+                      setClientDeleted(true)
+                    }
+                  }}
+                  >
                     Delete
                   </button>
                 </td>

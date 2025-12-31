@@ -6,7 +6,7 @@ import { FaBriefcase } from "react-icons/fa";
 const Navbar = ({currentTab,setCurrentTab}) => {
 
   return (
-    <div className='flex flex-col  w-3xs h-screen py-20 bg-gray-200 shadow-xl'>
+    <div className='sticky top-0 left-0 flex flex-col  w-3xs h-screen py-20 bg-gray-200 shadow-xl'>
       <button 
       className={`w-full flex text-start p-4 font-semibold hover:bg-gray-300 hover:cursor-pointer ${currentTab === 'Dashboard' ? "bg-gray-300 border-r-2 border-r-indigo-600" : ''}`}
       onClick={()=> setCurrentTab('Dashboard')}

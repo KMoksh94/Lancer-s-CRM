@@ -14,6 +14,8 @@ router.get('/all-clients', requireLogin,async(req,res)=> {
   }
 })
 
+// is deleted waala client dubara add ho to uska edge case add-client main add karna baaki hai
+
 router.post('/add-client', requireLogin,async(req,res)=>{
 try {
   const {name,companyName,email,notes} = req.body
@@ -36,11 +38,12 @@ try {
 router.post('/edit-client/:clientId', requireLogin, async(req,res)=> {
   try {
   const {clientId} = req.params
-  const {name,companyName,email} = req.body
+  const {name,companyName,email,notes} = req.body
   const updateData = {}
   if(name){updateData.name = name}
   if(companyName){updateData.companyName = companyName}
   if(email){updateData.email = email}
+  if(notes){updateData.notes = notes}
   if(!clientId){return res.status(400).json({response : `Kindly provide Client Id!`})}
   const requiredClient = await Client.findOne({_id:clientId, user: req.user._id, isDeleted : false})
   if(!requiredClient){return res.status(400).json({response : `User does not have any client with such Id!`})}
@@ -63,9 +66,11 @@ router.post('/edit-client/:clientId', requireLogin, async(req,res)=> {
 })
 
 
-router.post('/delete-client/:clientId', requireLogin, async(req,res)=> {
+router.get('/delete-client/:clientId', requireLogin, async(req,res)=> {
 try {
     const {clientId} = req.params
+    const findClient = await Client.findOne({_id:clientId, user : req.user._id})
+    if(!findClient){return res.status(400).json({response : `Client not found. Kindly check the Id and try again!`})}
     const requiredClient = await Client.findOneAndUpdate({_id:clientId,user:req.user._id}, {isDeleted : true})
     // related projects bhi delete karna hai abhi
     return res.status(200).json({response : `Client successfully deleted!`})

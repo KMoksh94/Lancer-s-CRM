@@ -1,0 +1,61 @@
+const express = require('express');
+const Project = require('../database-connection/project-model');
+const Client = require('../database-connection/client-model');
+const requireLogin = require('../middlewares/requireLogin');
+const router = express.Router()
+
+
+// AMOUNT PAISE MAIN RAKHNA HAI. BACKEND ME PAISE MAIN HI STORE HOGA FOR AVOIDING FLOATING PRECISION ISSUES. FRONTEND MAIN 100 SE DIVIDE KARNA MAT BHOOLNA
+
+
+router.post('/add-project',requireLogin,async(req,res)=> {
+try {
+  const {name,clientName,status,dueDate,amount,paymentDate,description} = req.body;
+const pushData = {}
+// client ka dropdown selection hoga jo name show karega but hidden id bhi hogi. Wahi all client list se fetch hogi vo dropdown list bhi, isDeleted false waale.
+if(!name || !dueDate || !amount || !clientName)
+  return res.status(400).json({response : `Kindly provide the required fields!`})
+const findProject = await Project.findOne({name,clientName,user:req.user._id})
+if(findProject)return res.status(400).json({response : `Project Exists for the same client!`})
+  const checkClientId = await Client.findOne({_id : clientName, user : req.user._id, isDeleted :false})
+if(!checkClientId)return res.status(400).json({response :`Wrong Client Id. Kindly check the client Id`})
+  if(name){pushData.name = name}
+  if(clientName){pushData.clientName = clientName}
+  pushData.status = status || 'Active'
+  if(dueDate){pushData.dueDate=new Date(dueDate)}
+  if(paymentDate){pushData.paymentDate = new Date(paymentDate)}
+  if(description){pushData.description = description}
+  if(amount){pushData.amount = amount}
+  pushData.user = req.user._id
+
+  const project = new Project(pushData)
+  await project.save() 
+  const updateClientProjectList = await Client.findOneAndUpdate({_id : clientName, user : req.user._id, isDeleted : false}, {$addToSet : {projectList : project._id}})
+  return res.status(201).json({response : `Project Successfully Created!`, project})
+} catch (error) {
+  console.log(error);
+  return res.status(500).json({response : `Internal Server Error`})
+}
+})
+
+router.post('/edit-project', requireLogin,async(req,res)=>{
+  
+})
+
+router.get('/project-details/:projectId',async(req,res)=>{
+
+})
+
+router.get('/delete-project/:projectId',async(req,res)=>{
+
+})
+
+router.post('/status-update/:projectId',requireLogin,async(req,res)=> {
+  // this will update status as well as paymentDate
+})
+
+router.get('/all-projects',requireLogin, async(req,res)=> {
+
+})
+
+module.exports = router

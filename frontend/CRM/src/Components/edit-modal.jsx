@@ -3,8 +3,8 @@ import { useState } from 'react';
 import apiCall from '../utilities/axios';
 
 
-const AddModal = ({setOpenModal,setNewClientCreated}) => {
-  const [newClientData,setNewClientData] = useState(
+const EditModal = ({setEditModal,setEditedClient,clientId,clientInfo}) => {
+  const [editClientData,setEditClientData] = useState(
     {
       name : '',
       companyName : '',
@@ -13,17 +13,17 @@ const AddModal = ({setOpenModal,setNewClientCreated}) => {
     }
   )
   const handleChange = (e) => {
-    setNewClientData({...newClientData,[e.target.name] : e.target.value})
+    setEditClientData({...editClientData,[e.target.name] : e.target.value})
   }
   const handleSubmit = async ()=> {
     try {
-      const response = await apiCall.post('/clients/add-client',newClientData)
+      const response = await apiCall.post(`/clients/edit-client/${clientId}`,editClientData)
       console.log(response);
       alert(response.data.response)
     } catch (error) {
       console.log(error);
     }finally{
-      setNewClientCreated(true)
+      setEditedClient(true)
     }
   }
   return (
@@ -35,7 +35,7 @@ const AddModal = ({setOpenModal,setNewClientCreated}) => {
       className="bg-white w-[90%] max-w-md rounded-lg shadow-lg p-6"
       onClick={(e) => e.stopPropagation()} // 👈 prevents backdrop click close
     >
-      <h2 className="text-xl font-semibold mb-4">Add New Client</h2>
+      <h2 className="text-xl font-semibold mb-4">Edit Client</h2>
 
       <div className="space-y-6 mb-10">
   
@@ -48,6 +48,7 @@ const AddModal = ({setOpenModal,setNewClientCreated}) => {
       type="text"
       name="name"
       id="name"
+      value={clientInfo.name}
       onChange={(e)=> {handleChange(e)}}
       required
       className="rounded-md border border-gray-300 px-3 py-2 
@@ -65,6 +66,7 @@ const AddModal = ({setOpenModal,setNewClientCreated}) => {
       type="text"
       name="companyName"
       id="companyName"
+      value={clientInfo.companyName}
       onChange={(e)=> {handleChange(e)}}
       required
       className="rounded-md border border-gray-300 px-3 py-2
@@ -82,6 +84,7 @@ const AddModal = ({setOpenModal,setNewClientCreated}) => {
       type="email"
       name="email"
       id="email"
+      value={clientInfo.email}
       onChange={(e)=> {handleChange(e)}}
       required
       className="rounded-md border border-gray-300 px-3 py-2
@@ -99,6 +102,7 @@ const AddModal = ({setOpenModal,setNewClientCreated}) => {
       name="notes"
       id="notes"
       rows="3"
+      value={clientInfo.notes}
       onChange={(e)=> {handleChange(e)}}
       className="rounded-md border border-gray-300 px-3 py-2 resize-none
                  focus:outline-none focus:ring-2 focus:ring-indigo-500
@@ -112,7 +116,7 @@ const AddModal = ({setOpenModal,setNewClientCreated}) => {
       <div className="flex justify-end gap-3">
         <button
           className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300"
-          onClick={() => setOpenModal(false)}
+          onClick={() => setEditModal(false)}
         >
           Cancel
         </button>
@@ -121,9 +125,9 @@ const AddModal = ({setOpenModal,setNewClientCreated}) => {
           className="px-4 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700"
           onClick={() => {
             // do something
-            console.log(newClientData);
+            console.log(editClientData);
             handleSubmit();
-            setOpenModal(false);
+            setEditModal(false);
           }}
         >
           Confirm
@@ -135,4 +139,4 @@ const AddModal = ({setOpenModal,setNewClientCreated}) => {
   )
 }
 
-export default AddModal
+export default EditModal
