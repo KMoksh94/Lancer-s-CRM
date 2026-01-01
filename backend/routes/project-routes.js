@@ -55,7 +55,13 @@ router.post('/status-update/:projectId',requireLogin,async(req,res)=> {
 })
 
 router.get('/all-projects',requireLogin, async(req,res)=> {
-
+try {
+  const projectList = await Project.find({user : req.user._id,isDeleted:false}).populate("clientName").sort({dueDate : 1})
+    return res.status(200).json({response : `Projects recieved successfully!`, projectList})
+} catch (error) {
+  console.log(error);
+  return res.status(500).json({response : `Internal Server Error`})
+}
 })
 
 module.exports = router

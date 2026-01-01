@@ -87,7 +87,7 @@ const ClientPage = ({setCurrentTab,setClientId}) => {
 
             {/* Table Body */}
             <tbody>
-              <tr className="hover:bg-gray-200 transition border-b border-b-gray-300">
+              {/* <tr className="hover:bg-gray-200 transition border-b border-b-gray-300">
                 <td className="px-4 py-3 text-sm text-gray-800 hover:underline cursor-pointer">
                   John Smith
                 </td>
@@ -113,7 +113,7 @@ const ClientPage = ({setCurrentTab,setClientId}) => {
                     Delete
                   </button>
                 </td>
-              </tr>
+              </tr> */}
               {clientList.map(client=>{
                 return (<tr className="hover:bg-gray-200 transition border-b border-b-gray-300">
                   <td className='hidden'>{client?._id}</td>
