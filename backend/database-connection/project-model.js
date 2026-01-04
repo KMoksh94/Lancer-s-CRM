@@ -11,8 +11,14 @@ const projectSchema = new mongoose.Schema({
   },
   status : {
     type : String,
-    enum : ['Paid', 'Active', 'Overdue'],
+    enum : ['Complete', 'Active', 'Overdue'],
     default : 'Active',
+    required : true
+  },
+  paymentStatus : {
+    type : String,
+    enum : ['Paid', 'Pending', 'Overdue'],
+    default : 'Pending',
     required : true
   },
   dueDate : {
@@ -45,6 +51,9 @@ const projectSchema = new mongoose.Schema({
 
 // compound index for faster query searches when both arguements are used in the same query, 1 for ascending order -1 for descending 
 projectSchema.index({user : 1, status : 1})
+projectSchema.index({user : 1, paymentStatus : 1})
+projectSchema.index({user : 1, paymentStatus : 1, status : 1})
+projectSchema.index({ dueDate: 1, status: 1, paymentStatus: 1 })
 projectSchema.index({user : 1, clientName : 1})
 projectSchema.index({user :1, isDeleted : 1})
 projectSchema.index({name :1,clientName :1,user :1})

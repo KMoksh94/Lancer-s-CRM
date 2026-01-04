@@ -6,7 +6,7 @@ const router = express.Router()
 
 router.get('/all-clients', requireLogin,async(req,res)=> {
   try {
-  const allClients = await Client.find({user : req.user._id, isDeleted: false})
+  const allClients = await Client.find({user : req.user._id, isDeleted: false}).populate({path : 'projectList', match : {isDeleted : false}, select : 'status paymentStatus' })
   return res.status(200).json({response : `Fetched Successfully`, clients : allClients})  
   } catch (error) {
   console.log(error);
@@ -24,7 +24,7 @@ try {
     {$or : [
       {name,companyName},  //ye and ka shortform hai
       {email}
-    ]})
+    ],user : req.user._id})
   if(findClient){return res.status(400).json({response : `A client with this name from same company or email already exists`})}
   const client = new Client({name,companyName,email,notes, user:req.user._id})
   await client.save()
@@ -85,7 +85,7 @@ try {
   const {clientId} = req.params
   const requiredClient = await Client.findOne({
     _id : clientId, user : req.user._id, isDeleted : false
-  })
+  }).populate({path : 'projectList', match : {isDeleted : false}})
   // need to get all the projects as well
   return res.status(200).json({response : `Client found successfully`, client : requiredClient})
 } catch (error) {

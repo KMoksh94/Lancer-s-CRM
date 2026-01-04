@@ -134,7 +134,16 @@ const ClientPage = ({setCurrentTab,setClientId}) => {
                 </td>
                 <td className="px-4 py-3 text-sm text-center">
                   <span className="px-2 py-1 text-xs font-medium rounded bg-indigo-100 text-indigo-600">
-                    3
+                    {function (){
+                      let activeProjects = 0
+                      for(let i =0; i < client?.projectList?.length; i++){
+                        if(client?.projectList[i]?.status == 'Active'){
+                          activeProjects++
+                        }
+                      }
+                      return activeProjects
+                    }()
+                    }
                   </span>
                 </td>
                 <td className="px-4 py-3 text-sm text-gray-600">

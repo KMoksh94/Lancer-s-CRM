@@ -5,25 +5,10 @@ import apiCall from '../utilities/axios';
 import { useEffect } from 'react';
 import AddProjectModal from './add-project-modal';
 
-const ProjetcsPage = () => {
+const ProjetcsPage = ({setProjectId,setCurrentTab}) => {
   const [userProjectList,setUserProjectList] = useState([])
   const [openAddModal,setOpenAddModal] = useState(false)
-
-  const [clientOptions,setClientOptions] = useState([])
-  const getClientOptions = async()=>{
-    try {
-      const response = await apiCall.get('/clients/all-clients')
-      const clientNames = response.data.clients.map(client =>({_id : client._id,name:client.name}))
-      setClientOptions(...clientNames)
-      console.log(clientOptions);
-      
-    } catch (error) {
-      console.log(error);
-    }
-  }
-  useEffect(()=>{
-    getClientOptions()
-  },[])
+  const [newProjectCreated,setNewProjectCreated] = useState(false)
   
   const getUserProjectList = async ()=> {
     try {
@@ -39,9 +24,15 @@ const ProjetcsPage = () => {
     getUserProjectList()
   },[])
 
+  useEffect(()=>{
+    if(!newProjectCreated)return
+    getUserProjectList()
+    setNewProjectCreated(false)
+  },[newProjectCreated])
+
   return (
     <div>
-      {openAddModal && <AddProjectModal setOpenAddModal={setOpenAddModal}/>}
+      {openAddModal && <AddProjectModal setOpenAddModal={setOpenAddModal} setNewProjectCreated={setNewProjectCreated}/>}
       <div className='topSection w-full py-3 px-10 flex'>
         <div className='options flex flex-1 items-center space-x-6'>
          <div className='filter border border-gray-300 rounded px-2 py-1 bg-gray-200'>
@@ -92,6 +83,9 @@ const ProjetcsPage = () => {
           <th className="px-4 py-3 text-center text-sm font-semibold text-gray-600 border-b">
             Status
           </th>
+          <th className="px-4 py-3 text-center text-sm font-semibold text-gray-600 border-b">
+            Payment
+          </th>
           <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600 border-b">
             Due Date
           </th>
@@ -106,49 +100,18 @@ const ProjetcsPage = () => {
 
       {/* Table Body */}
       <tbody>
-        <tr className="hover:bg-gray-50 transition">
-
-          {/* Hidden values (still accessible in data) */}
-          <td className="hidden">PRJ_001</td>
-          <td className="hidden">USER_123</td>
-
-          <td className="px-4 py-3 text-sm font-medium text-gray-800">
-            Website Redesign
-          </td>
-          <td className="px-4 py-3 text-sm text-gray-700">
-            John Smith
-          </td>
-          <td className="px-4 py-3 text-sm text-gray-700">
-            Acme Corp
-          </td>
-          <td className="px-4 py-3 text-sm text-center">
-            <span className="px-2 py-1 rounded text-xs font-semibold bg-red-100 text-red-600">
-              Overdue
-            </span>
-          </td>
-          <td className="px-4 py-3 text-sm text-gray-600">
-            25 Sep 2025
-          </td>
-          <td className="px-4 py-3 text-sm text-gray-800 font-medium">
-            ₹15,000
-          </td>
-          <td className="px-4 py-3 text-sm text-center space-x-3">
-            <button className=" bg-indigo-600 text-white rounded py-1 px-3 text-sm cursor-pointer hover:bg-indigo-700">
-              View
-            </button>
-            <button className=" bg-green-600 text-white rounded py-1 px-3 text-sm cursor-pointer hover:bg-green-700">
-              Mark Paid
-            </button>
-          </td>
-        </tr>
-        {userProjectList.map(project=>{
+        {userProjectList?.map(project=>{
           return (
-             <tr className="hover:bg-gray-50 transition">
+             <tr className="hover:bg-gray-200 transition">
 
           <td className="hidden">{project?._id}</td>
           <td className="hidden">{project?.user}</td>
 
-          <td className="px-4 py-3 text-sm font-medium text-gray-800">
+          <td className="px-4 py-3 text-sm font-medium text-gray-800 cursor-pointer hover:underline"
+          onClick={()=>{
+            setCurrentTab('Project Details')
+            setProjectId(project?._id)
+          }}>
             {project?.name}
           </td>
           <td className="px-4 py-3 text-sm text-gray-700">
@@ -160,8 +123,15 @@ const ProjetcsPage = () => {
           <td className="px-4 py-3 text-sm text-center">
             <span className={`px-2 py-1 rounded text-xs font-semibold
             ${project?.status === 'Active' ? 'bg-indigo-100 text-indigo-600' : 
-            project.status === 'Paid' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
+            project.status === 'Complete' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
               {project?.status}
+            </span>
+          </td>
+          <td className="px-4 py-3 text-sm text-center">
+            <span className={`px-2 py-1 rounded text-xs font-semibold
+            ${project?.status === 'Pending' ? 'bg-indigo-100 text-indigo-600' : 
+            project.status === 'Paid' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
+              {project?.paymentStatus}
             </span>
           </td>
           <td className="px-4 py-3 text-sm text-gray-600">
@@ -173,10 +143,15 @@ const ProjetcsPage = () => {
             ₹{new Intl.NumberFormat("en-IN").format(project?.amount/100)}
           </td>
           <td className="px-4 py-3 text-sm text-center space-x-3">
-            <button className=" bg-indigo-600 text-white rounded py-1 px-3 text-sm cursor-pointer hover:bg-indigo-700">
+            <button className={`bg-indigo-600 text-white rounded py-1 px-3 text-sm cursor-pointer hover:bg-indigo-700
+            ${project?.status === 'Complete' ? 'flex items-right ms-8' : ''}`}
+            onClick={()=>{
+            setCurrentTab('Project Details')
+            setProjectId(project?._id)
+            }}>
               View
             </button>
-            <button className=" bg-green-600 text-white rounded py-1 px-3 text-sm cursor-pointer hover:bg-green-700">
+            <button className={` bg-green-600 text-white rounded py-1 px-3 text-sm cursor-pointer hover:bg-green-700 ${project?.status === 'Paid' ? 'hidden' : ''}`}>
               Mark Paid
             </button>
           </td>

@@ -6,10 +6,10 @@ import apiCall from '../utilities/axios';
 const EditModal = ({setEditModal,setEditedClient,clientId,clientInfo}) => {
   const [editClientData,setEditClientData] = useState(
     {
-      name : '',
-      companyName : '',
-      email : '',
-      notes : ''
+      name : clientInfo?.name,
+      companyName : clientInfo?.companyName,
+      email : clientInfo?.email,
+      notes : clientInfo?.notes
     }
   )
   const handleChange = (e) => {
@@ -48,7 +48,7 @@ const EditModal = ({setEditModal,setEditedClient,clientId,clientInfo}) => {
       type="text"
       name="name"
       id="name"
-      value={clientInfo.name}
+      value={editClientData.name}
       onChange={(e)=> {handleChange(e)}}
       required
       className="rounded-md border border-gray-300 px-3 py-2 
@@ -66,7 +66,7 @@ const EditModal = ({setEditModal,setEditedClient,clientId,clientInfo}) => {
       type="text"
       name="companyName"
       id="companyName"
-      value={clientInfo.companyName}
+      value={editClientData.companyName}
       onChange={(e)=> {handleChange(e)}}
       required
       className="rounded-md border border-gray-300 px-3 py-2
@@ -84,7 +84,7 @@ const EditModal = ({setEditModal,setEditedClient,clientId,clientInfo}) => {
       type="email"
       name="email"
       id="email"
-      value={clientInfo.email}
+      value={editClientData.email}
       onChange={(e)=> {handleChange(e)}}
       required
       className="rounded-md border border-gray-300 px-3 py-2
@@ -102,7 +102,7 @@ const EditModal = ({setEditModal,setEditedClient,clientId,clientInfo}) => {
       name="notes"
       id="notes"
       rows="3"
-      value={clientInfo.notes}
+      value={editClientData.notes}
       onChange={(e)=> {handleChange(e)}}
       className="rounded-md border border-gray-300 px-3 py-2 resize-none
                  focus:outline-none focus:ring-2 focus:ring-indigo-500

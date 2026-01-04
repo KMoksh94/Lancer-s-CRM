@@ -8,11 +8,13 @@ import ClientPage from '../Components/ClientPage'
 import MainDashboardPage from '../Components/MainDashboardPage'
 import ProjetcsPage from '../Components/ProjetcsPage'
 import ClientDetails from '../Components/ClientDetails'
+import ProjectDetails from '../Components/ProjectDetails'
 const Dashboard = ({token,setToken}) => {
   const [currentTab,setCurrentTab] = useState('Dashboard')
   const [user,setUser] = useState(null)
   const [loadingUser,setLoadingUser] = useState(true)
   const [clientId,setClientId] = useState(null)
+  const [projectId,setProjectId] = useState(null)
   console.log("Dashboard rendered, loadingUser =", loadingUser);
 
   useEffect(()=>{
@@ -39,10 +41,11 @@ const Dashboard = ({token,setToken}) => {
       <div className='w-full flex flex-col'>
       <Topbar currentTab={currentTab} user={user} setUser={setUser} setToken={setToken}></Topbar>
       <div className='w-full'>
-        {currentTab === 'Clients' && <ClientPage setCurrentTab={setCurrentTab} setClientId={setClientId}/>}
-        {currentTab === 'Dashboard' && <MainDashboardPage/>}
-        {currentTab === 'Projects' && <ProjetcsPage/>}
-        {currentTab === 'Client Details' && <ClientDetails clientId={clientId} setCurrentTab={setCurrentTab}/>}
+        {currentTab === 'Clients' && <ClientPage setCurrentTab={setCurrentTab} setClientId={setClientId} />}
+        {currentTab === 'Dashboard' && <MainDashboardPage setProjectId={setProjectId} setCurrentTab={setCurrentTab} setClientId={setClientId}/>}
+        {currentTab === 'Projects' && <ProjetcsPage setCurrentTab={setCurrentTab} setProjectId={setProjectId}/>}
+        {currentTab === 'Client Details' && <ClientDetails clientId={clientId} setCurrentTab={setCurrentTab} setProjectId={setProjectId}/>}
+        {currentTab === 'Project Details' && <ProjectDetails projectId = {projectId} setCurrentTab={setCurrentTab} setClientId={setClientId}/>}
       </div>
       </div>
     </div>

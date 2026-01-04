@@ -10,7 +10,7 @@ import apiCall from '../utilities/axios';
 import EditModal from './edit-modal';
 import deleteClient from '../utilities/deleteClient';
 
-const ClientDetails = ({clientId,setCurrentTab}) => {
+const ClientDetails = ({clientId,setCurrentTab,setProjectId}) => {
   const [clientInfo,setClientInfo] = useState({})
   const [editModal,setEditModal] = useState(false)
   const [editedClient,setEditedClient] = useState(false)
@@ -66,7 +66,7 @@ const ClientDetails = ({clientId,setCurrentTab}) => {
           <span className='mb-3 flex items-center space-x-3'>
           <span className='text-2xl'><FaBriefcase /></span><span className=''>{clientInfo?.companyName}</span>
           </span></div>
-          <div className='w-xl max-w-full flex font-semibold text-gray-700 border-b border-b-gray-300'>
+          <div className='w-full flex font-semibold text-gray-700 border-b border-b-gray-300'>
             <span className=' mb-3 pe-2 flex-1 border-r border-r-gray-300 flex items-center space-x-3'>
               <span className='text-2xl'><AiFillProject /></span>
               <span className='space-x-1'>
@@ -75,7 +75,7 @@ const ClientDetails = ({clientId,setCurrentTab}) => {
             <span className='mb-3 ps-2 flex-1 flex items-center space-x-3'>
             <span className='text-2xl'><LuReceiptIndianRupee /></span>
             <span className='space-x-1'>
-              <span>{clientInfo?.amount}</span>
+              <span>{clientInfo?.amount || "--"}</span>
               <span>Billed</span></span>
             </span>
           </div>
@@ -86,6 +86,44 @@ const ClientDetails = ({clientId,setCurrentTab}) => {
             <span className='px-3 font-normal'>{clientInfo?.notes}</span>
             </span>
           </span></div>
+      </div>
+
+      {/* Projects List Section */}
+      <div className='overflow-x-auto bg-white rounded-lg shadow px-5 py-5 m-5'>
+        <table className='w-full border-collapse'>
+          <thead className="bg-gray-100">
+            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600 border-b">Project Name</th>
+            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600 border-b">Status</th>
+            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600 border-b">Due Date</th>
+            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600 border-b">Amount</th>
+            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600 border-b">Payment</th>
+          </thead>
+          <tbody>
+            {clientInfo?.projectList?.map(project=>{
+              return (
+                <tr className="hover:bg-gray-200 transition border-b border-b-gray-300">
+                  <td className="px-4 py-3 text-sm text-gray-800 hover:underline cursor-pointer"
+                  onClick={()=>{
+                    setProjectId(project?._id)
+                    setCurrentTab('Project Details')
+                  }}
+                  >{project?.name}</td>
+                  <td className={`px-4 py-3 text-sm ${project?.status === 'Active'? 'text-indigo-600': project?.status === 'Complete' ? 'text-green-600' : 'text-red-600'}`}>
+                    {project?.status}</td>
+                  <td className="px-4 py-3 text-sm text-gray-700">
+                    {new Date(project?.dueDate).toLocaleDateString(('en-Gb'),{
+                    day : '2-digit',
+                    month : 'short',
+                    year : 'numeric'
+                  })}</td>
+                  <td className="px-4 py-3 text-sm text-gray-700">₹ {project?.amount /100 || '--'}</td>
+                  <td className={`px-4 py-3 text-sm ${project?.paymentStatus === 'Pending'? 'text-indigo-600': project?.paymentStatus === 'Paid' ? 'text-green-600' : 'text-red-600'}`}>
+                    {project?.paymentStatus}</td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
       </div>
     </div>
   )
