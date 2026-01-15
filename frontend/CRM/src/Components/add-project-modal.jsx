@@ -81,6 +81,7 @@ const AddProjectModal = ({setOpenAddModal, setNewProjectCreated}) => {
       </label>
       <select className="w-full border rounded-lg px-3 py-2" 
       onChange={(e)=>handleChange(e)} name='clientName'>
+        <option value="">--Select Client--</option>
         {clientOptions.length > 0 ? clientOptions.map(client=>{return(
           <option key={client._id} value={client._id}>{client.name}</option>
         )}): ''} 
@@ -173,8 +174,8 @@ const AddProjectModal = ({setOpenAddModal, setNewProjectCreated}) => {
       onClick={async (e)=>{
         if(newProjectData.name==='' || newProjectData.dueDate === '' || newProjectData.amount === 0) return alert(`Kindly fill all the required fields!`)
           console.log(newProjectData);
-        // await handleSubmit(e)
-        // setOpenAddModal(false)
+        await handleSubmit(e)
+        setOpenAddModal(false)
       }}>
         Add Project
       </button>

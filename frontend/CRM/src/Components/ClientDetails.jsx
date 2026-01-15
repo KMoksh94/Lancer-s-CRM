@@ -75,7 +75,11 @@ const ClientDetails = ({clientId,setCurrentTab,setProjectId}) => {
             <span className='mb-3 ps-2 flex-1 flex items-center space-x-3'>
             <span className='text-2xl'><LuReceiptIndianRupee /></span>
             <span className='space-x-1'>
-              <span>{clientInfo?.amount || "--"}</span>
+              <span>{(()=>{
+                const projectList = clientInfo?.projectList
+                const amount = projectList?.reduce((acc,val)=>acc+(val?.amount)/100,0)
+                return Intl.NumberFormat('en-IN').format(amount) || "--"
+              })()}</span>
               <span>Billed</span></span>
             </span>
           </div>
@@ -116,7 +120,7 @@ const ClientDetails = ({clientId,setCurrentTab,setProjectId}) => {
                     month : 'short',
                     year : 'numeric'
                   })}</td>
-                  <td className="px-4 py-3 text-sm text-gray-700">₹ {project?.amount /100 || '--'}</td>
+                  <td className="px-4 py-3 text-sm text-gray-700">₹ {Intl.NumberFormat('en-IN').format(project?.amount /100) || '--'}</td>
                   <td className={`px-4 py-3 text-sm ${project?.paymentStatus === 'Pending'? 'text-indigo-600': project?.paymentStatus === 'Paid' ? 'text-green-600' : 'text-red-600'}`}>
                     {project?.paymentStatus}</td>
                 </tr>

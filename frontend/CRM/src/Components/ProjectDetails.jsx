@@ -6,25 +6,33 @@ import { HiMiniCalendarDateRange } from "react-icons/hi2";
 import { LuReceiptIndianRupee } from "react-icons/lu";
 import { MdOutlineSpeakerNotes } from "react-icons/md";
 import apiCall from '../utilities/axios'
+import updateStatusRequest from '../utilities/updateStatusRequest';
+import deleteProject from '../utilities/deleteProject';
 
 const ProjectDetails = ({projectId,setCurrentTab,setClientId}) => {
 
   const [projectInfo,setProjectInfo] = useState(null)
   const [editProjectModal,setEditProjectModal] = useState(false)
   const [editedProject,setEditedProject] = useState(false)
+  const [updateStatus,setUpdateStatus] = useState({})
   
   
   const getProjectDetails = async(projectId)=> {
-    console.log(`entered function`);
-    console.log(projectId);
      const response = await apiCall.get(`/projects/project-details/${projectId}`)
      setProjectInfo(response.data.project)
-    console.log(response.data.project);
     }
 
+  useEffect(()=>{
+    const call = async ()=>{
+      if(updateStatus?.status || updateStatus?.paymentStatus){
+        await updateStatusRequest(projectId,updateStatus)
+        await getProjectDetails(projectId)
+    }
+    }
+    call()
+  },[updateStatus])
+
     useEffect(()=>{
-      console.log(`entered use effect`);
-      
       getProjectDetails(projectId)
     },[])
   
@@ -90,7 +98,12 @@ return (
         <span className='text-2xl'><HiMiniCalendarDateRange /></span>
         <span className='space-x-1'>
           <span>Payment Date : </span>
-          <span>{projectInfo?.paymentDate || '--'}</span></span>
+          <span>{
+          projectInfo?.paymentDate ? new Date(projectInfo?.paymentDate).toLocaleDateString(('en-GB'),{
+            day : '2-digit',
+            month : 'short',
+            year : 'numeric'
+          }) : '--'}</span></span>
         </span>
       </div>
       <div className='w-full font-semibold text-gray-700 border-b border-b-gray-300'>
@@ -109,10 +122,19 @@ return (
 
     {/* Actions */}
     <div className='bg-white mt-5 flex flex-wrap px-10 py-3 space-y-3'>
-      <div className='w-full font-semibold text-xl border-b border-b-gray-500'>Actions</div>
+      <div className={`w-full font-semibold text-xl border-b border-b-gray-500 ${(projectInfo?.paymentStatus === 'Paid' && projectInfo?.status === 'Complete') ? 'hidden' : ''}`}>
+        Actions</div>
       <div className='flex space-x-5 text-white'>
-        <button className='bg-green-600 hover:bg-green-700 cursor-pointer px-3 py-2 rounded font-semibold'>Mark as Paid</button>
-      <button className='bg-indigo-600 hover:bg-indigo-700 cursor-pointer px-3 py-2 rounded font-semibold'>Mark Complete</button>
+        <button className={`bg-green-600 hover:bg-green-700 cursor-pointer px-3 py-2 rounded font-semibold ${projectInfo?.paymentStatus === 'Paid' ? 'hidden' : ''}`}
+        onClick={async ()=>{
+          setUpdateStatus({paymentStatus:'Paid',paymentDate : new Date()})
+        }}
+        >Mark as Paid</button>
+      <button className={`bg-indigo-600 hover:bg-indigo-700 cursor-pointer px-3 py-2 rounded font-semibold ${projectInfo?.status === 'Complete' ? 'hidden' : ''}`}
+      onClick={async ()=>{
+        setUpdateStatus({status : 'Complete'})
+      }}>
+        Mark Complete</button>
       </div>
     </div>
     </div>

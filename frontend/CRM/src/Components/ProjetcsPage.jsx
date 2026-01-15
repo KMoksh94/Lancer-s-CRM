@@ -4,11 +4,13 @@ import { FaPlus } from "react-icons/fa6";
 import apiCall from '../utilities/axios';
 import { useEffect } from 'react';
 import AddProjectModal from './add-project-modal';
+import updateStatusRequest from '../utilities/updateStatusRequest';
 
 const ProjetcsPage = ({setProjectId,setCurrentTab}) => {
   const [userProjectList,setUserProjectList] = useState([])
   const [openAddModal,setOpenAddModal] = useState(false)
   const [newProjectCreated,setNewProjectCreated] = useState(false)
+  const [statusUpdated,setStatusUpdated] = useState(false)
   
   const getUserProjectList = async ()=> {
     try {
@@ -29,6 +31,12 @@ const ProjetcsPage = ({setProjectId,setCurrentTab}) => {
     getUserProjectList()
     setNewProjectCreated(false)
   },[newProjectCreated])
+
+  useEffect(()=>{
+    if(!statusUpdated)return
+    getUserProjectList()
+    setStatusUpdated(false)
+  },[statusUpdated])
 
   return (
     <div>
@@ -129,8 +137,8 @@ const ProjetcsPage = ({setProjectId,setCurrentTab}) => {
           </td>
           <td className="px-4 py-3 text-sm text-center">
             <span className={`px-2 py-1 rounded text-xs font-semibold
-            ${project?.status === 'Pending' ? 'bg-indigo-100 text-indigo-600' : 
-            project.status === 'Paid' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
+            ${project?.paymentStatus === 'Pending' ? 'bg-indigo-100 text-indigo-600' : 
+            project.paymentStatus === 'Paid' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
               {project?.paymentStatus}
             </span>
           </td>
@@ -142,16 +150,21 @@ const ProjetcsPage = ({setProjectId,setCurrentTab}) => {
           <td className="px-4 py-3 text-sm text-gray-800 font-medium">
             ₹{new Intl.NumberFormat("en-IN").format(project?.amount/100)}
           </td>
-          <td className="px-4 py-3 text-sm text-center space-x-3">
+          <td className="px-4 py-3 text-sm flex justify-end space-x-3">
             <button className={`bg-indigo-600 text-white rounded py-1 px-3 text-sm cursor-pointer hover:bg-indigo-700
-            ${project?.status === 'Complete' ? 'flex items-right ms-8' : ''}`}
+            ${project?.paymentStatus === 'Paid' ? 'me-24.5' : ''}`}
             onClick={()=>{
             setCurrentTab('Project Details')
             setProjectId(project?._id)
             }}>
               View
             </button>
-            <button className={` bg-green-600 text-white rounded py-1 px-3 text-sm cursor-pointer hover:bg-green-700 ${project?.status === 'Paid' ? 'hidden' : ''}`}>
+            <button className={` bg-green-600 text-white rounded py-1 px-3 text-sm cursor-pointer hover:bg-green-700 ${project?.paymentStatus === 'Paid' ? 'hidden' : ''}`}
+            onClick={async ()=>{
+              await updateStatusRequest(project?._id,{paymentStatus : "Paid",paymentDate : new Date()})
+              setStatusUpdated(true)
+            }}
+            >
               Mark Paid
             </button>
           </td>

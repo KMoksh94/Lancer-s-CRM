@@ -4,6 +4,7 @@ const app = express()
 const cors = require('cors')
 const overdueProjectsUpdate = require('./utilities/overdueProjects.js')
 const { default: projectMigrate } = require('./utilities/projectMigrate.js')
+const scheduleDelete = require('./utilities/deletedItems.js')
 require('dotenv').config()
 const PORT = process.env.PORT || 6000
 connectionDB()
@@ -16,5 +17,6 @@ app.use('/clients',require('./routes/client-routes.js'))
 app.use('/projects',require('./routes/project-routes.js'))
 
 overdueProjectsUpdate.start()
+scheduleDelete.start()
 
 app.listen(PORT, ()=> {console.log(`Server is running at ${PORT}`)})

@@ -2,7 +2,7 @@ import React from 'react'
 
 const Topbar = ({currentTab,user,setToken}) => {
   return (
-    <div className='sticky top-0 w-full h-15 flex items-center justify-between px-6 bg-white' >
+    <div className='sticky top-0 w-full h-15 flex items-center justify-between px-6 bg-white z-50' >
       <div className='font-semibold text-3xl'>{currentTab}</div>
       <div className='right-section flex space-x-8 items-center font-semibold'>
         <div className='name'>{`${user.firstName} ${user.lastName}`}</div>

@@ -57,5 +57,8 @@ projectSchema.index({ dueDate: 1, status: 1, paymentStatus: 1 })
 projectSchema.index({user : 1, clientName : 1})
 projectSchema.index({user :1, isDeleted : 1})
 projectSchema.index({name :1,clientName :1,user :1})
+projectSchema.index({user : 1,createdAt : 1})
+projectSchema.index({user : 1, clientName : 1, createdAt : 1})
+
 const Project = mongoose.model('Project', projectSchema)
 module.exports = Project
