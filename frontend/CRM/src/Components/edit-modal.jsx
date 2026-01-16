@@ -35,7 +35,7 @@ const EditModal = ({setEditModal,setEditedClient,clientId,clientInfo}) => {
       className="bg-white w-[90%] max-w-md rounded-lg shadow-lg p-6"
       onClick={(e) => e.stopPropagation()} // 👈 prevents backdrop click close
     >
-      <h2 className="text-xl font-semibold mb-4">Edit Client</h2>
+      <h2 className="text-xl font-semibold mb-4 pb-1 border-b">Edit Client</h2>
 
       <div className="space-y-6 mb-10">
   

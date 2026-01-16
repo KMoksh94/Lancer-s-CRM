@@ -35,7 +35,7 @@ const AddModal = ({setOpenModal,setNewClientCreated}) => {
       className="bg-white w-[90%] max-w-md rounded-lg shadow-lg p-6"
       onClick={(e) => e.stopPropagation()} // 👈 prevents backdrop click close
     >
-      <h2 className="text-xl font-semibold mb-4">Add New Client</h2>
+      <h2 className="text-xl font-semibold mb-4 pb-1 border-b">Add New Client</h2>
 
       <div className="space-y-6 mb-10">
   

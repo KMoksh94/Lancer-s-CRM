@@ -12,11 +12,13 @@ const ClientPage = ({setCurrentTab,setClientId}) => {
   const [clientList,setClientList] = useState([])
   const [newClientCreated,setNewClientCreated] = useState(false)
   const [clientDeleted,setClientDeleted] = useState(false)
+  const [searchClient,setSearchClient] = useState([])
   const fetchClients = async ()=> {
     try {
     const response = await apiCall.get('/clients/all-clients')
     console.log(response.data.clients);
-    setClientList(response.data.clients)  
+    setClientList(response.data.clients)
+    setSearchClient(response.data.clients)  
     } catch (error) {
       console.log(error);
     }
@@ -50,7 +52,10 @@ const ClientPage = ({setCurrentTab,setClientId}) => {
           type="text"
           name='searchClient'
           id='searchClient'
-          placeholder='Search Clients...' />
+          placeholder='Search Clients...'
+          onChange={(e)=>{console.log(e.target.value)
+            setSearchClient(clientList.filter(client => client?.name.includes(e.target.value)))
+          }} />
         </div>
         <button
          className='px-4 flex items-center rounded bg-indigo-500 text-white hover:cursor-pointer hover:bg-indigo-600'
@@ -114,7 +119,7 @@ const ClientPage = ({setCurrentTab,setClientId}) => {
                   </button>
                 </td>
               </tr> */}
-              {clientList.map(client=>{
+              {searchClient.map(client=>{
                 return (<tr className="hover:bg-gray-200 transition border-b border-b-gray-300">
                   <td className='hidden'>{client?._id}</td>
                   <td className='hidden'>{client?.user}</td>

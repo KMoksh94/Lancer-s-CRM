@@ -11,12 +11,13 @@ const ProjetcsPage = ({setProjectId,setCurrentTab}) => {
   const [openAddModal,setOpenAddModal] = useState(false)
   const [newProjectCreated,setNewProjectCreated] = useState(false)
   const [statusUpdated,setStatusUpdated] = useState(false)
-  
+  const [filteredList,setFilteredList] = useState([])
   const getUserProjectList = async ()=> {
     try {
       const response = await apiCall.get('/projects/all-projects')
       console.log(response.data)
       setUserProjectList(response.data.projectList)
+      setFilteredList(response.data.projectList)
     } catch (error) {
       console.log(error);
     }
@@ -45,16 +46,33 @@ const ProjetcsPage = ({setProjectId,setCurrentTab}) => {
         <div className='options flex flex-1 items-center space-x-6'>
          <div className='filter border border-gray-300 rounded px-2 py-1 bg-gray-200'>
           <span className='pe-1 text-gray-500'>Filter By Status : </span>
-          <select name="filter" id="filter" className='font-semibold'>
-            <option value="none">None</option>
-            <option value="Paid">Paid</option>
+          <select name="filter" id="filter" className='font-semibold'
+          onChange={(e)=>{
+            setFilteredList(userProjectList.filter(project=>{
+              if(e.target.value === ''){
+                return true
+              }else{
+               return project?.status === e.target.value 
+              }}))
+          }}>
+            <option value="">None</option>
+            <option value="Complete">Complete</option>
             <option value="Active">Active</option>
             <option value="Overdue">Overdue</option>
           </select>
         </div>
         <div className='sort border border-gray-300 rounded px-2 py-1 bg-gray-200'>
           <span className='pe-1 text-gray-500'>Sort By : </span>
-          <select name="sort" id="sort" className='font-semibold'>
+          <select name="sort" id="sort" className='font-semibold'
+          onChange={(e)=>{
+            setFilteredList([...filteredList].sort((a,b)=>{
+              if(e.target.value === 'dueDate'){
+                return new Date(a?.dueDate) - new Date(b?.dueDate)
+              }else if(e.target.value === 'amount'){
+                return a?.amount - b?.amount
+              }
+            }))
+          }}>
             <option value="dueDate">Due Date</option>
             <option value="amount">Amount</option>
           </select>
@@ -108,7 +126,7 @@ const ProjetcsPage = ({setProjectId,setCurrentTab}) => {
 
       {/* Table Body */}
       <tbody>
-        {userProjectList?.map(project=>{
+        {filteredList?.map(project=>{
           return (
              <tr className="hover:bg-gray-200 transition">
 

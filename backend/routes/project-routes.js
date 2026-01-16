@@ -39,8 +39,47 @@ if(!checkClientId)return res.status(400).json({response :`Wrong Client Id. Kindl
 }
 })
 
-router.post('/edit-project', requireLogin,async(req,res)=>{
+router.post('/edit-project/:projectId', requireLogin,async(req,res)=>{
   try {
+  const {projectId} = req.params
+  
+  // input check
+  const {name,clientName,status,paymentStatus,dueDate,amount,paymentDate,description} = req.body;
+  if(!name || !dueDate || !amount || !clientName)
+return res.status(400).json({response : `Kindly provide the required fields!`})
+  const pushData = {}
+  
+  // project exists check
+  const requiredProject = await Project.findOne({_id : projectId, user : req.user._id})
+  if(!requiredProject) return res.status(400).json({response : `Project Not Found!`})
+  
+  // new client exists check
+  const checkClientId = await Client.findOne({_id : clientName, user : req.user._id, isDeleted :false})
+  if(!checkClientId)return res.status(400).json({response :`Wrong Client Id. Kindly check the client Id`})
+  
+  // project list update in case of different client
+  if(requiredProject.clientName.toString() != clientName){
+    const findProject = await Project.findOne({
+      _id : {$ne : projectId},name,clientName,user:req.user._id})
+    if(findProject)return res.status(400).json({response : `Project Exists for the same client!`})
+    const updateOriginalClientProjectList = await Client.findOneAndUpdate({_id : requiredProject.clientName, user : req.user._id, isDeleted : false}, {$pull : {projectList : requiredProject._id}})
+    const updateClientProjectList = await Client.findOneAndUpdate({_id : clientName, user : req.user._id, isDeleted : false}, {$addToSet : {projectList : requiredProject._id}})
+  }
+  // Data ready
+    if(name){pushData.name = name}
+    if(clientName){pushData.clientName = clientName}
+    pushData.status = status || 'Active'
+    if(dueDate){pushData.dueDate=new Date(dueDate)}
+    if(paymentStatus){pushData.paymentStatus = paymentStatus}
+    if(paymentDate){pushData.paymentDate = new Date(paymentDate)}
+    if(description){pushData.description = description}
+    if(amount!== undefined){pushData.amount = amount}
+    pushData.user = req.user._id
+    if(dueDate && new Date(dueDate) < new Date() && ((paymentStatus === 'Pending' || paymentStatus === 'Overdue') || status !== 'Complete')){pushData.status = 'Overdue'} 
+
+    // update the project
+    const updateProject = await Project.findOneAndUpdate({_id : projectId, user : req.user._id, isDeleted : false},{$set : pushData},{new : true})
+    return res.status(200).json({response : `Project Updated Successfully!`, project : updateProject})
     
   } catch (error) {
     console.log(error);

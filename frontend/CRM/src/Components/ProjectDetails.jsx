@@ -8,11 +8,13 @@ import { MdOutlineSpeakerNotes } from "react-icons/md";
 import apiCall from '../utilities/axios'
 import updateStatusRequest from '../utilities/updateStatusRequest';
 import deleteProject from '../utilities/deleteProject';
+import AddProjectModal from './add-project-modal';
 
 const ProjectDetails = ({projectId,setCurrentTab,setClientId}) => {
 
   const [projectInfo,setProjectInfo] = useState(null)
   const [editProjectModal,setEditProjectModal] = useState(false)
+  const [editModal,setEditModal] = useState(false)
   const [editedProject,setEditedProject] = useState(false)
   const [updateStatus,setUpdateStatus] = useState({})
   
@@ -35,10 +37,16 @@ const ProjectDetails = ({projectId,setCurrentTab,setClientId}) => {
     useEffect(()=>{
       getProjectDetails(projectId)
     },[])
+
+    useEffect(()=>{
+      if(!editedProject) return
+      getProjectDetails(projectId)
+      setEditedProject(false)
+    },[editedProject])
   
 return (
   <div className='overflow-scroll'>
-    {/* {editModal && <EditModal setEditModal={setEditModal} setEditedClient={setEditedClient} clientId={clientId} clientInfo = {clientInfo}/>} */}
+    {editModal && <AddProjectModal editModal = {editModal} projectInfo = {projectInfo} setEditModal = {setEditModal} setEditedProject = {setEditedProject} />}
       <div className='topSection mt-10 bg-white flex w-full px-10 py-3  justify-between'>
         <div className='flex flex-col flex-1 text-left '>
           <span className='font-bold text-2xl'>{projectInfo?.name}</span>
@@ -46,7 +54,7 @@ return (
         </div>
         <div className=' space-x-5 px-5 flex items-center'>
           <button className='bg-indigo-500 hover:bg-indigo-700 text-white py-1 px-3 rounded shadow-2xl cursor-pointer'
-          onClick={()=>setEditProjectModal(true)}>Edit Project</button>
+          onClick={()=>setEditModal(true)}>Edit Project</button>
           <button className='bg-red-500 hover:bg-red-700 text-white py-1 px-3 rounded shadow-2xl cursor-pointer'
           onClick={async ()=>{
             const confirmation = confirm(`Are you sure? Related Projects will also be deleted!`)
@@ -109,7 +117,7 @@ return (
       <div className='w-full font-semibold text-gray-700 border-b border-b-gray-300'>
         <span className='my-3 flex items-center space-x-3 '>
         <span className='text-2xl'><LuReceiptIndianRupee /></span>
-        Amount : <span className='px-3'>₹ {projectInfo?.amount /100}</span>
+        Amount : <span className='px-3'>₹ {Intl.NumberFormat('en-IN').format(projectInfo?.amount /100)}</span>
         </span>
       </div>
       <div className='w-full font-semibold text-gray-700 border-b border-b-gray-300'>
