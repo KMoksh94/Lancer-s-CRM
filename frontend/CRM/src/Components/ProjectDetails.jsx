@@ -13,7 +13,6 @@ import AddProjectModal from './add-project-modal';
 const ProjectDetails = ({projectId,setCurrentTab,setClientId}) => {
 
   const [projectInfo,setProjectInfo] = useState(null)
-  const [editProjectModal,setEditProjectModal] = useState(false)
   const [editModal,setEditModal] = useState(false)
   const [editedProject,setEditedProject] = useState(false)
   const [updateStatus,setUpdateStatus] = useState({})

@@ -24,6 +24,7 @@ const AddProjectModal = ({setOpenAddModal, setNewProjectCreated,
     editModal ? setPaymentStatus(projectInfo?.paymentStatus) : ''
     editModal ? setStatus(projectInfo?.status) : ''
 
+    if (projectInfo != undefined)
     setEditProjectData({
       name: projectInfo.name || '',
       status: projectInfo.status || 'Active',

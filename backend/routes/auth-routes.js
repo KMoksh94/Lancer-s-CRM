@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken')
 const {encryptPass, decryptPass} = require('../utilities/bcrypt.js');
 const User = require('../database-connection/user-model.js');
 const requireLogin = require('../middlewares/requireLogin.js');
+const transporter = require('../utilities/nodemailer.js');
+const cloudinaryCall = require('../utilities/cloudinary.js');
 
 router.post('/signup', async (req,res)=>{
 try {
@@ -11,7 +13,7 @@ try {
   if(!firstName || !lastName || !userName || !email || !password){
     return res.status(400).json({response : `Kindly provide all fields!`})
   }
-  const existingUserCheck = await User.findOne({$or : [{email,userName}]})
+  const existingUserCheck = await User.findOne({$or : [{email,userName, isDeleted : false}]})
   if(existingUserCheck){return res.status(409).json(`User already exists`)}
   const hashPass = await encryptPass(password)
   const user = new User({firstName, lastName,userName,email, password : hashPass})
@@ -26,7 +28,7 @@ router.post('/login', async (req,res)=> {
   try {
     const {userName,password} = req.body
   if(!userName || !password){return res.status(400).json({response : `Kindly provide all the fields!`})}
-  const findUser = await User.findOne({userName})
+  const findUser = await User.findOne({userName,isDeleted:false})
   if(!findUser){return res.status(401).json({response : `User not found`})}
   const plainPass = await decryptPass(password, findUser.password)
   if(!plainPass){return res.status(401).json({response : `Incorrect Password!`})}
@@ -41,9 +43,113 @@ router.post('/login', async (req,res)=> {
   }
 })
 
+
 router.get('/getUser', requireLogin, async(req,res)=> {
   return res.status(200).json({response : req.user})
 })
 
+router.post("/forgotPassword",async(req,res)=>{
+  try {
+    const {email} = req.body
+    const checkEmail = await User.findOne({
+    email,isDeleted:false
+  }) 
+  if(!checkEmail)return res.status(400).json({response : `Cannot find User with the requested Email. Kindly try again`})
+  const token = (Math.random()*10).toString()
+  checkEmail.resetPasswordToken = token
+  checkEmail.resetPasswordExpiry = Date.now() + 15*60*1000
+  await checkEmail.save()
+  const url = cloudinaryCall()
+  console.log(url);
+  const msg = await transporter.sendMail({
+    to :checkEmail.email,
+    subject : `Request for Password Reset`,
+    html :`<div style="
+  background:#fdfaf4;
+  padding:40px 0;
+  width:100%;
+">
+
+  <div style="
+    max-width:600px;
+    margin:0 auto;
+    background:#ffffff;
+    border-radius:10px;
+    padding:30px;
+    font-family:Arial, sans-serif;
+    text-align:center;
+  ">
+
+    <!-- Logo -->
+    <div style="
+      font-size:24px;
+      font-weight:bold;
+      color:#1f2937;
+      margin-bottom:20px;
+    ">
+      <img src="${url}.png" alt="Lancer's CRM"
+      style="
+    display:block;
+    margin:0 auto 20px auto;
+    max-width:220px;
+    width:100%;
+    height:auto;
+  ">
+    </div>
+
+    <!-- Text -->
+    <div style="
+      color:#4b5563;
+      line-height:1.6;
+      margin-bottom:30px;
+      font-weight: 900;
+    ">
+      You requested to reset your password.  
+      Click the button below to set a new password.
+    </div>
+
+    <!-- Button -->
+    <div>
+      <a href="${process.env.BASE_URL}/reset-password/${token}"
+        style="
+          display:inline-block;
+          padding:12px 24px;
+          background:#ed4343;
+          color:#ffffff;
+          text-decoration:none;
+          border-radius:6px;
+          font-size:14px;
+          font-weight:600;
+        ">
+        Reset Password
+      </a>
+    </div>
+
+  </div>
+</div>`
+  })
+  console.log(`Message Sent ${msg.messageId}`);
+  
+  return res.status(200).json({response : `Mail sent Successfully!`})
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({response : `Server Error`})
+  }
+})
+
+router.post('/reset-password/:token',async(req,res)=>{
+  const {token} = req.params
+  const {password} = req.body
+  console.log(token,password);
+  const user = await User.findOne({isDeleted : false, resetPasswordToken : token, resetPasswordExpiry : {$gte : new Date()}})
+  console.log(user);
+  if(!user)return res.status(200).json({response : `Token Expired!`})
+    const hashPass = await encryptPass(password)
+    user.password = hashPass
+    user.resetPasswordExpiry = undefined
+    user.resetPasswordToken = undefined
+    user.save()
+    return res.status(200).json({response : `Password updated Successfully`})
+})
 
 module.exports = router

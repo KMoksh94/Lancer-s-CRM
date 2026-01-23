@@ -2,8 +2,9 @@ import React from "react";
 import { useState } from "react";
 import apiCall from "../utilities/axios";
 import { useNavigate } from "react-router-dom";
+import ForgotPassModal from "../Components/ForgotPassModal";
 
-const Auth = ({setToken}) => {
+const Auth = ({setToken, setResetPass, resetPass}) => {
   const navigate = useNavigate()
   const [mode, setMode] = useState("login");
   const [formData, setFormData] = useState({
@@ -46,12 +47,12 @@ const Auth = ({setToken}) => {
   };
   return (
     <>
+    {resetPass && <ForgotPassModal resetPass={resetPass} setResetPass={setResetPass}/>}
       <div className="min-h-screen flex flex-col items-center justify-center bg-linear-to-b from-gray-100 to-gray-200">
         <div className="top-section">
           <div className="max-w-3xs">
             <img src="/assets/logo-removebg-preview.png" alt="logo" />
           </div>
-          {/* <div className='text-2xl font-semibold text-center'>Lancer's CRM</div> */}
           <div className="text-sm font-semibold text-gray-500 text-center mt-1 mb-6">
             {mode === "login"
               ? "Sign In to your Account"
@@ -159,7 +160,13 @@ const Auth = ({setToken}) => {
                 onChange={(e)=> handleChange(e)}
                 className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
-              <button className="flex w-full justify-end text-xs text-indigo-600 mt-3">
+              <button
+              type="button"
+              className="flex w-full justify-end text-xs text-indigo-600 mt-3"
+              onClick={(e)=>{
+                console.log(`Forgot Password Clicked!`)
+                setResetPass(true)
+              }}>
                 <span className="text-indigo-600 hover:underline cursor-pointer">
                   Forgot Password?
                 </span>
