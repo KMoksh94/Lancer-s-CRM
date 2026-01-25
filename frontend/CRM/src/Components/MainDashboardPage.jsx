@@ -111,7 +111,7 @@ const MainDashboardPage = ({setClientId,setProjectId,setCurrentTab}) => {
   },[])
 
   return (
-  <div className='w-full px-15 py-4'>
+  <div className='w-full px-5 md:px-15 py-4'>
 
     <div className='topSection gap-10 flex flex-wrap items-center justify-between'>
       <div className='border border-gray-50 rounded-xl shadow bg-gray-200 min-w-2/12 p-3 flex space-x-5'>
@@ -141,7 +141,7 @@ const MainDashboardPage = ({setClientId,setProjectId,setCurrentTab}) => {
     </div>
 
 {/* Dashboard Charts */}
-<div className='w-full my-4 flex items-center justify-center bg-white rounded-xl shadow py-4 gap-4'>
+<div className='w-full my-4 flex flex-col md:flex-row items-center justify-center bg-white rounded-xl shadow py-4 gap-4'>
   <div className='flex flex-col flex-1 px-4 items-center justify-center '>
     <div className='w-full border-b flex justify-between mb-2 pb-2 border-b-gray-500'>
       <span className='font-semibold'>Monthly Revenue :</span>
@@ -188,10 +188,10 @@ const MainDashboardPage = ({setClientId,setProjectId,setCurrentTab}) => {
             <tr>
             <th className="px-4 text-left text-sm font-semibold text-gray-600 border-b">Client</th>
             <th className="px-4 text-left text-sm font-semibold text-gray-600 border-b">Project</th>
-            <th className="px-4 text-left text-sm font-semibold text-gray-600 border-b">Status</th>
-            <th className="px-4 text-left text-sm font-semibold text-gray-600 border-b">Amount</th>
-            <th className="px-4 text-left text-sm font-semibold text-gray-600 border-b">Due Date</th>
-            <th className="px-4 text-left text-sm font-semibold text-gray-600 border-b">Payment</th>
+            <th className="px-4 text-left text-sm font-semibold text-gray-600 border-b hidden md:table-cell">Status</th>
+            <th className="px-4 text-left text-sm font-semibold text-gray-600 border-b hidden md:table-cell">Amount</th>
+            <th className="px-4 text-left text-sm font-semibold text-gray-600 border-b hidden md:table-cell">Due Date</th>
+            <th className="px-4 text-left text-sm font-semibold text-gray-600 border-b hidden md:table-cell">Payment</th>
           </tr>
           </thead>
           <tbody>
@@ -215,17 +215,17 @@ const MainDashboardPage = ({setClientId,setProjectId,setCurrentTab}) => {
                 >{project?.name}</td>
 
                 <td
-                className={`px-4 py-3 text-sm ${project?.status === 'Active'? 'text-indigo-600': project?.status === 'Complete' ? 'text-green-600' : 'text-red-600'}`}>{project?.status}</td>
+                className={`px-4 py-3 text-sm hidden md:table-cell ${project?.status === 'Active'? 'text-indigo-600': project?.status === 'Complete' ? 'text-green-600' : 'text-red-600'}`}>{project?.status}</td>
 
-                <td className="px-4 py-3 text-sm text-gray-700">₹ {project?.amount /100 || "--"}</td>
+                <td className="px-4 py-3 text-sm hidden md:table-cell text-gray-700">₹ {project?.amount /100 || "--"}</td>
                 <td
-                className="px-4 py-3 text-sm text-gray-700">{new Date(project?.dueDate).toLocaleDateString(('en-GB'),{
+                className="px-4 py-3 text-sm hidden md:table-cell text-gray-700">{new Date(project?.dueDate).toLocaleDateString(('en-GB'),{
                   day : '2-digit',
                   month : 'short',
                   year : 'numeric'
                 })}</td>
                 <td 
-                className={`px-4 py-3 text-sm ${project?.paymentStatus === 'Pending'? 'text-indigo-600': project?.paymentStatus === 'Paid' ? 'text-green-600' : 'text-red-600'}`}>{project?.paymentStatus}</td>
+                className={`px-4 py-3 text-sm hidden md:table-cell ${project?.paymentStatus === 'Pending'? 'text-indigo-600': project?.paymentStatus === 'Paid' ? 'text-green-600' : 'text-red-600'}`}>{project?.paymentStatus}</td>
               </tr>)
             })}
           </tbody>

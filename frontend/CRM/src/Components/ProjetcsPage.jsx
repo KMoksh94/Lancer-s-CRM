@@ -42,9 +42,9 @@ const ProjetcsPage = ({setProjectId,setCurrentTab}) => {
   return (
     <div>
       {openAddModal && <AddProjectModal setOpenAddModal={setOpenAddModal} setNewProjectCreated={setNewProjectCreated}/>}
-      <div className='topSection w-full py-3 px-10 flex'>
-        <div className='options flex flex-1 items-center space-x-6'>
-         <div className='filter border border-gray-300 rounded px-2 py-1 bg-gray-200'>
+      <div className='topSection w-full py-3 px-10 flex-col space-y-2 md:space-y-0 md:flex'>
+        <div className='options flex flex-col md:flex-row space-y-3 md:space-y-0 flex-1 items-center space-x-6'>
+         <div className='filter border border-gray-300 rounded px-2 py-1 bg-gray-200 -mx-6 md:mx-0 w-full md:w-60 flex justify-between'>
           <span className='pe-1 text-gray-500'>Filter By Status : </span>
           <select name="filter" id="filter" className='font-semibold'
           onChange={(e)=>{
@@ -61,7 +61,7 @@ const ProjetcsPage = ({setProjectId,setCurrentTab}) => {
             <option value="Overdue">Overdue</option>
           </select>
         </div>
-        <div className='sort border border-gray-300 rounded px-2 py-1 bg-gray-200'>
+        <div className='sort border border-gray-300 rounded -mx-6 md:ms-3 px-2 py-1 bg-gray-200 flex w-full md:w-60 justify-between'>
           <span className='pe-1 text-gray-500'>Sort By : </span>
           <select name="sort" id="sort" className='font-semibold'
           onChange={(e)=>{
@@ -78,7 +78,7 @@ const ProjetcsPage = ({setProjectId,setCurrentTab}) => {
           </select>
         </div>
       </div>
-        <div className='buttons flex items-center ps-5'>
+        <div className='buttons flex flex-1 justify-end items-center ps-5'>
         <button className='add-new flex items-center rounded px-2 py-1 bg-indigo-500 text-white hover:bg-indigo-700 cursor-pointer'
         onClick={()=>{setOpenAddModal(true)}}>
           <span className='pe-1'><FaPlus/></span>
@@ -106,19 +106,19 @@ const ProjetcsPage = ({setProjectId,setCurrentTab}) => {
           <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600 border-b">
             Company
           </th>
-          <th className="px-4 py-3 text-center text-sm font-semibold text-gray-600 border-b">
+          <th className="px-4 py-3 text-center text-sm font-semibold text-gray-600 border-b hidden md:table-cell">
             Status
           </th>
-          <th className="px-4 py-3 text-center text-sm font-semibold text-gray-600 border-b">
+          <th className="px-4 py-3 text-center text-sm font-semibold text-gray-600 border-b hidden md:table-cell">
             Payment
           </th>
-          <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600 border-b">
+          <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600 border-b hidden md:table-cell">
             Due Date
           </th>
-          <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600 border-b">
+          <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600 border-b hidden md:table-cell">
             Amount
           </th>
-          <th className="px-4 py-3 text-center text-sm font-semibold text-gray-600 border-b">
+          <th className="px-4 py-3 text-center text-sm font-semibold text-gray-600 border-b hidden lg:table-cell">
             Actions
           </th>
         </tr>
@@ -146,29 +146,29 @@ const ProjetcsPage = ({setProjectId,setCurrentTab}) => {
           <td className="px-4 py-3 text-sm text-gray-700">
             {project?.clientName?.companyName}
           </td>
-          <td className="px-4 py-3 text-sm text-center">
+          <td className="px-4 py-3 text-sm text-center hidden md:table-cell">
             <span className={`px-2 py-1 rounded text-xs font-semibold
             ${project?.status === 'Active' ? 'bg-indigo-100 text-indigo-600' : 
             project.status === 'Complete' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
               {project?.status}
             </span>
           </td>
-          <td className="px-4 py-3 text-sm text-center">
+          <td className="px-4 py-3 text-sm text-center hidden md:table-cell">
             <span className={`px-2 py-1 rounded text-xs font-semibold
             ${project?.paymentStatus === 'Pending' ? 'bg-indigo-100 text-indigo-600' : 
             project.paymentStatus === 'Paid' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
               {project?.paymentStatus}
             </span>
           </td>
-          <td className="px-4 py-3 text-sm text-gray-600">
+          <td className="px-4 py-3 text-sm text-gray-600 hidden md:table-cell">
             {new Date(project?.dueDate).toLocaleDateString('en-GB',{
               day : '2-digit', month : 'short', year : 'numeric'
             })}
           </td>
-          <td className="px-4 py-3 text-sm text-gray-800 font-medium">
+          <td className="px-4 py-3 text-sm text-gray-800 font-medium hidden md:table-cell">
             ₹{new Intl.NumberFormat("en-IN").format(project?.amount/100)}
           </td>
-          <td className="px-4 py-3 text-sm flex justify-end space-x-3">
+          <td className="px-4 py-3 text-sm lg:flex justify-end space-x-3 hidden">
             <button className={`bg-indigo-600 text-white rounded py-1 px-3 text-sm cursor-pointer hover:bg-indigo-700
             ${project?.paymentStatus === 'Paid' ? 'me-24.5' : ''}`}
             onClick={()=>{

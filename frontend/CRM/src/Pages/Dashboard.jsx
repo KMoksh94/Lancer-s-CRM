@@ -15,6 +15,7 @@ const Dashboard = ({token,setToken}) => {
   const [loadingUser,setLoadingUser] = useState(true)
   const [clientId,setClientId] = useState(null)
   const [projectId,setProjectId] = useState(null)
+  const [collapse,setCollapse] = useState(false)
   console.log("Dashboard rendered, loadingUser =", loadingUser);
 
   useEffect(()=>{
@@ -32,13 +33,19 @@ const Dashboard = ({token,setToken}) => {
      fetchUser()
   },[token])
  
+  useEffect(()=>{
+    const handleScroll = ()=>setCollapse(true)
+    window.addEventListener('scroll',handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  },[])
 
   return (
     <>
     {loadingUser ? <Loader></Loader> : 
-    <div className='bg-gray-100 flex'>
-      <Navbar currentTab = {currentTab} setCurrentTab = {setCurrentTab}></Navbar>
-      <div className='w-full flex flex-col'>
+    <div className='bg-gray-100 flex flex-col md:flex-row'>
+      <Navbar currentTab = {currentTab} setCurrentTab = {setCurrentTab} collapse={collapse} setCollapse={setCollapse}></Navbar>
+      <div className='w-full flex flex-col'
+      onScroll={()=>{setCollapse(false)}}>
       <Topbar currentTab={currentTab} user={user} setUser={setUser} setToken={setToken}></Topbar>
       <div className='w-full'>
         {currentTab === 'Clients' && <ClientPage setCurrentTab={setCurrentTab} setClientId={setClientId} />}

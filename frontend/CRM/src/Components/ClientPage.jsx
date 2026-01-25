@@ -44,7 +44,7 @@ const ClientPage = ({setCurrentTab,setClientId}) => {
   return (
     <div>
       {openModal && <AddModal setOpenModal={setOpenModal} setNewClientCreated={setNewClientCreated}/>}
-      <div className=' w-full flex px-10 py-3 justify-between'>
+      <div className=' w-full flex flex-col md:flex-row space-y-2 md:space-y-0 px-10 py-3 justify-between'>
         <div className='border border-gray-300 bg-white shadow-2xl flex space-x-2 px-2 py-1 rounded'>
           <label htmlFor="searchClient" className='text-2xl text-blue-800'><IoSearch /></label>
           <input
@@ -58,7 +58,7 @@ const ClientPage = ({setCurrentTab,setClientId}) => {
           }} />
         </div>
         <button
-         className='px-4 flex items-center rounded bg-indigo-500 text-white hover:cursor-pointer hover:bg-indigo-600'
+         className='px-4 flex items-center rounded bg-indigo-500 text-white hover:cursor-pointer hover:bg-indigo-600 py-2 md:py-0'
          onClick={()=>setOpenModal(true)}
          ><span className='pe-2'><FaPlus /></span> Add New Client</button>
       </div>
@@ -75,16 +75,16 @@ const ClientPage = ({setCurrentTab,setClientId}) => {
                 <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600 border-b">
                   Company
                 </th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600 border-b">
+                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600 border-b hidden md:table-cell">
                   Email
                 </th>
                 <th className="px-4 py-3 text-center text-sm font-semibold text-gray-600 border-b">
                   Active Projects
                 </th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600 border-b">
+                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600 border-b hidden md:table-cell">
                   Created At
                 </th>
-                <th className="px-4 py-3 text-center text-sm font-semibold text-gray-600 border-b">
+                <th className="px-4 py-3 text-center text-sm font-semibold text-gray-600 border-b hidden lg:table-cell">
                   Actions
                 </th>
               </tr>
@@ -134,7 +134,7 @@ const ClientPage = ({setCurrentTab,setClientId}) => {
                 <td className="px-4 py-3 text-sm text-gray-700">
                   {client?.companyName}
                 </td>
-                <td className="px-4 py-3 text-sm text-gray-700">
+                <td className="px-4 py-3 text-sm text-gray-700 hidden md:table-cell">
                   {client?.email}
                 </td>
                 <td className="px-4 py-3 text-sm text-center">
@@ -151,14 +151,14 @@ const ClientPage = ({setCurrentTab,setClientId}) => {
                     }
                   </span>
                 </td>
-                <td className="px-4 py-3 text-sm text-gray-600">
+                <td className="px-4 py-3 text-sm text-gray-600 hidden md:table-cell">
                   {new Date(client?.createdAt).toLocaleDateString('en-GB',{
                     day : "2-digit",
                     month : 'short',
                     year : 'numeric'
                   })}
                 </td>
-                <td className="px-4 py-3 text-center space-x-1">
+                <td className="px-4 py-3 text-center space-x-1 hidden lg:table-cell">
                   <button className=" bg-indigo-600 text-white rounded py-1 px-3 text-sm cursor-pointer hover:bg-indigo-700"
                   onClick={()=> {
                   setCurrentTab('Client Details')

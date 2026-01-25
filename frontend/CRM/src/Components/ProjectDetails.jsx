@@ -46,12 +46,12 @@ const ProjectDetails = ({projectId,setCurrentTab,setClientId}) => {
 return (
   <div className='overflow-scroll'>
     {editModal && <AddProjectModal editModal = {editModal} projectInfo = {projectInfo} setEditModal = {setEditModal} setEditedProject = {setEditedProject} />}
-      <div className='topSection mt-10 bg-white flex w-full px-10 py-3  justify-between'>
+      <div className='topSection mt-10 bg-white flex flex-col md:flex-row space-y-3 md:space-y-0 w-full px-10 py-3  justify-between'>
         <div className='flex flex-col flex-1 text-left '>
           <span className='font-bold text-2xl'>{projectInfo?.name}</span>
           <span className='text-gray-600'>{projectInfo?.clientName?.companyName}</span>
         </div>
-        <div className=' space-x-5 px-5 flex items-center'>
+        <div className=' space-x-5 md:px-5 flex items-center'>
           <button className='bg-indigo-500 hover:bg-indigo-700 text-white py-1 px-3 rounded shadow-2xl cursor-pointer'
           onClick={()=>setEditModal(true)}>Edit Project</button>
           <button className='bg-red-500 hover:bg-red-700 text-white py-1 px-3 rounded shadow-2xl cursor-pointer'

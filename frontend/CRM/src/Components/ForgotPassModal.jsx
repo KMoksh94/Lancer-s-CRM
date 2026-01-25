@@ -4,12 +4,13 @@ import apiCall from '../utilities/axios'
 const ForgotPassModal = ({resetPass, setResetPass}) => {
  
   const [email,setEmail] = useState('')
-  
+  const [loading,setLoading] = useState(false)
   const handleSubmit = async (e)=>{
   e.preventDefault()
   console.log(email);
   const response = await apiCall.post('/user/forgotPassword',{email})
   alert(response.data.response)
+  setLoading(false)
  }
  
  
@@ -50,9 +51,10 @@ const ForgotPassModal = ({resetPass, setResetPass}) => {
           <button
             type="submit"
             className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition"
-            onClick={(e)=>handleSubmit(e)}
-          >
-            Send Reset Link
+            onClick={(e)=>{handleSubmit(e)
+              setLoading(true)
+            }}
+          >{!loading ?"Send Reset Link" : 'Sent'}
           </button>
         </form>
       </div>

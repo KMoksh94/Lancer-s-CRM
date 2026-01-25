@@ -36,12 +36,12 @@ const ClientDetails = ({clientId,setCurrentTab,setProjectId}) => {
   return (
     <div className='overflow-scroll'>
     {editModal && <EditModal setEditModal={setEditModal} setEditedClient={setEditedClient} clientId={clientId} clientInfo = {clientInfo}/>}
-      <div className='topSection mt-10 bg-white flex w-full px-10 py-3  justify-between'>
+      <div className='topSection mt-10 bg-white flex flex-col md:flex-row space-y-3 md:space-y-0 w-full px-10 py-3  justify-between'>
         <div className='flex flex-col flex-1 text-left '>
           <span className='font-bold text-2xl'>{clientInfo?.name}</span>
           <span className='text-gray-600'>{clientInfo.companyName}</span>
         </div>
-        <div className=' space-x-5 px-5 flex items-center'>
+        <div className=' space-x-5 md:px-5 flex items-center'>
           <button className='bg-indigo-500 hover:bg-indigo-700 text-white py-1 px-3 rounded shadow-2xl cursor-pointer'
           onClick={()=>setEditModal(true)}>Edit Client</button>
           <button className='bg-red-500 hover:bg-red-700 text-white py-1 px-3 rounded shadow-2xl cursor-pointer'
@@ -99,8 +99,8 @@ const ClientDetails = ({clientId,setCurrentTab,setProjectId}) => {
             <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600 border-b">Project Name</th>
             <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600 border-b">Status</th>
             <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600 border-b">Due Date</th>
-            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600 border-b">Amount</th>
-            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600 border-b">Payment</th>
+            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600 border-b hidden md:table-cell">Amount</th>
+            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600 border-b hidden md:table-cell">Payment</th>
           </thead>
           <tbody>
             {clientInfo?.projectList?.map(project=>{
@@ -114,14 +114,14 @@ const ClientDetails = ({clientId,setCurrentTab,setProjectId}) => {
                   >{project?.name}</td>
                   <td className={`px-4 py-3 text-sm ${project?.status === 'Active'? 'text-indigo-600': project?.status === 'Complete' ? 'text-green-600' : 'text-red-600'}`}>
                     {project?.status}</td>
-                  <td className="px-4 py-3 text-sm text-gray-700">
+                  <td className="px-4 py-3 text-sm text-gray-700 hidden md:table-cell">
                     {new Date(project?.dueDate).toLocaleDateString(('en-Gb'),{
                     day : '2-digit',
                     month : 'short',
                     year : 'numeric'
                   })}</td>
                   <td className="px-4 py-3 text-sm text-gray-700">₹ {Intl.NumberFormat('en-IN').format(project?.amount /100) || '--'}</td>
-                  <td className={`px-4 py-3 text-sm ${project?.paymentStatus === 'Pending'? 'text-indigo-600': project?.paymentStatus === 'Paid' ? 'text-green-600' : 'text-red-600'}`}>
+                  <td className={`px-4 py-3 text-sm ${project?.paymentStatus === 'Pending'? 'text-indigo-600': project?.paymentStatus === 'Paid' ? 'text-green-600' : 'text-red-600'} hidden md:table-cell`}>
                     {project?.paymentStatus}</td>
                 </tr>
               )
