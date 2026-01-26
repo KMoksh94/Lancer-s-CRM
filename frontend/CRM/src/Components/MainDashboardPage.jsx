@@ -108,26 +108,26 @@ const MainDashboardPage = ({setClientId,setProjectId,setCurrentTab}) => {
   return (
   <div className='w-full px-5 md:px-15 py-4'>
 
-    <div className='topSection gap-10 flex flex-wrap items-center justify-between'>
-      <div className='border border-gray-50 rounded-xl shadow bg-gray-200 min-w-2/12 p-3 flex space-x-5'>
+    <div className='topSection gap-5 md:gap-10 flex flex-wrap items-center justify-between'>
+      <div className='border border-gray-50 rounded-xl shadow bg-gray-200 min-w-full md:min-w-2/12 p-3 flex space-x-5'>
         <div className='text-3xl flex items-center'><MdPeopleAlt /></div>
         <div className='flex flex-col items-center'>
         <span className='text-gray-500 font-semibold'>Total Clients</span>
         <span className='font-semibold text-xl w-full text-left'>{topData.clients}</span></div>
       </div>
-      <div className='border border-gray-50 rounded-xl shadow bg-gray-200 min-w-2/12 p-3 flex space-x-5'>
+      <div className='border border-gray-50 rounded-xl shadow bg-gray-200 min-w-full md:min-w-2/12 p-3 flex space-x-5'>
         <div className='text-3xl flex items-center'><VscProject /></div>
         <div className='flex flex-col items-center'>
         <span className='text-gray-500 font-semibold'>Active Projects</span>
         <span className='font-semibold text-xl w-full text-left'>{topData.active}</span></div>
       </div>
-      <div className='border border-gray-50 rounded-xl shadow bg-gray-200 min-w-2/12 p-3 flex space-x-5'>
+      <div className='border border-gray-50 rounded-xl shadow bg-gray-200 min-w-full md:min-w-2/12 p-3 flex space-x-5'>
         <div className='text-3xl flex items-center'><FaExclamationTriangle /></div>
         <div className='flex flex-col items-center'>
         <span className='text-gray-500 font-semibold'>Overdue Payments</span>
         <span className='font-semibold text-xl w-full text-left'>{topData.overdue}</span></div>
       </div>
-      <div className='border border-gray-50 rounded-xl shadow bg-gray-200 min-w-2/12 p-3 flex space-x-5'>
+      <div className='border border-gray-50 rounded-xl shadow bg-gray-200 min-w-full md:min-w-2/12 p-3 flex space-x-5'>
         <div className='text-3xl flex items-center'><FaRupeeSign /></div>
         <div className='flex flex-col items-center'>
         <span className='text-gray-500 font-semibold'>{`This Month (₹)`}</span>
@@ -154,7 +154,7 @@ const MainDashboardPage = ({setClientId,setProjectId,setCurrentTab}) => {
     </div>
   <SimpleBarChart chartData={chartData} />
   </div>
-  <div className='flex flex-col flex-1 px-4 items-center justify-center'>
+  <div className='flex flex-col flex-1 px-4 items-center justify-center w-full'>
     <div className='w-full border-b flex justify-between mb-2 pb-2 border-b-gray-500'>
       <span className='font-semibold'>Projects :</span>
       <select name="months" id="months" className='font-semibold'
@@ -169,6 +169,10 @@ const MainDashboardPage = ({setClientId,setProjectId,setCurrentTab}) => {
         </option>
       </select>
     </div>
+    <div className='w-full flex justify-evenly'>
+    <span className='text-[#00C49F]'><span>■</span> Complete</span>
+    <span className='text-[#0088FE]'><span>■</span> Active</span>
+    <span className='text-[#FF8042]'><span>■</span> Overdue</span></div>
     <StatusPieChart pieChartData = {pieChartData}/>
   </div>
 </div>

@@ -64,7 +64,8 @@ const SimpleBarChart = ({chartData}) => {
       <CartesianGrid strokeDasharray="3 3" />
       <XAxis dataKey="month"
       tick = {{fontSize : 10}} />
-      <YAxis width="auto" />
+      <YAxis width="auto" 
+      tick = {{fontSize : 10}}/>
       <Tooltip />
       <Legend />
       <Bar dataKey="Amount" fill="#8884d8" activeBar={{ fill: 'pink', stroke: 'blue' }} radius={[10, 10, 0, 0]} />

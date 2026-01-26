@@ -6,7 +6,7 @@ const overdueProjectsUpdate = require('./utilities/overdueProjects.js')
 const { default: projectMigrate } = require('./utilities/projectMigrate.js')
 const scheduleDelete = require('./utilities/deletedItems.js')
 require('dotenv').config()
-const PORT = process.env.PORT || 6000
+const PORT = process.env.PORT || 5000
 connectionDB()
 
 app.use(cors())
