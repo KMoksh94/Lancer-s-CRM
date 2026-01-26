@@ -15,7 +15,6 @@ const ProjetcsPage = ({setProjectId,setCurrentTab}) => {
   const getUserProjectList = async ()=> {
     try {
       const response = await apiCall.get('/projects/all-projects')
-      console.log(response.data)
       setUserProjectList(response.data.projectList)
       setFilteredList(response.data.projectList)
     } catch (error) {

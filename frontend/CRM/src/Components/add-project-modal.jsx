@@ -40,7 +40,6 @@ const AddProjectModal = ({setOpenAddModal, setNewProjectCreated,
         : ''
     })
     
-    console.log('After effect log',editProjectData);
     
   },[editModal,projectInfo])
   
@@ -54,16 +53,13 @@ const AddProjectModal = ({setOpenAddModal, setNewProjectCreated,
 
   const handleSubmit = async (e)=>{
     e.preventDefault()
-    console.log(newProjectData);
     // data utha raha hai saara bas ab api lagani hai
     try {
       if(!editModal){
         const response = await apiCall.post('/projects/add-project',newProjectData)
-        console.log(response);
       setNewProjectCreated(true)
       alert(response.data.response)
       }else if(editModal){
-        console.log('Here is edit',editProjectData);
         const response = await apiCall.post(`/projects/edit-project/${projectInfo?._id}`,editProjectData)
         setEditedProject(true)
         alert(response.data.response)
@@ -77,7 +73,6 @@ const AddProjectModal = ({setOpenAddModal, setNewProjectCreated,
   const getClientOptions = async()=>{
     try {
       const response = await apiCall.get('/clients/all-clients')
-      console.log(response);
       const clientNames = response.data.clients.map(client =>({_id : client._id,name:client.name}))
       setClientOptions(clientNames)
       
@@ -89,7 +84,6 @@ const AddProjectModal = ({setOpenAddModal, setNewProjectCreated,
     getClientOptions()
   },[])
 
-console.log('Initial Log', editProjectData);
 
   return (
 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
@@ -267,7 +261,6 @@ console.log('Initial Log', editProjectData);
       onClick={async (e)=>{
         if(!editModal){
           if(newProjectData.name==='' || newProjectData.dueDate === '' || newProjectData.amount === 0) return alert(`Kindly fill all the required fields!`)
-        console.log(newProjectData);
         }
         await handleSubmit(e)
         editModal ? setEditModal(false) : setOpenAddModal(false)

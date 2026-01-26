@@ -18,7 +18,6 @@ const AddModal = ({setOpenModal,setNewClientCreated}) => {
   const handleSubmit = async ()=> {
     try {
       const response = await apiCall.post('/clients/add-client',newClientData)
-      console.log(response);
       alert(response.data.response)
     } catch (error) {
       console.log(error);
@@ -120,8 +119,6 @@ const AddModal = ({setOpenModal,setNewClientCreated}) => {
         <button
           className="px-4 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700"
           onClick={() => {
-            // do something
-            console.log(newClientData);
             handleSubmit();
             setOpenModal(false);
           }}

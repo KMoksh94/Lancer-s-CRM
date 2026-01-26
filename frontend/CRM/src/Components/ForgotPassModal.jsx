@@ -7,7 +7,6 @@ const ForgotPassModal = ({resetPass, setResetPass}) => {
   const [loading,setLoading] = useState(false)
   const handleSubmit = async (e)=>{
   e.preventDefault()
-  console.log(email);
   const response = await apiCall.post('/user/forgotPassword',{email})
   alert(response.data.response)
   setLoading(false)

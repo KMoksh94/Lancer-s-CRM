@@ -125,7 +125,6 @@ router.post('/status-update/:projectId',requireLogin,async(req,res)=> {
     updateData.paymentDate = paymentDate || new Date()}
   const requiredProject = await Project.findOne({_id : projectId, user : req.user._id, isDeleted : false})
   if(!requiredProject)return res.status(400).json({response : `Project not found! Kindly check user or project.`})
-    console.log(updateData);
   const updatedProject = await Project.findOneAndUpdate({_id : requiredProject._id},{$set : updateData}, {new : true})
     return res.status(200).json({response : `Project Successfully Updated!`, project : updatedProject})
   } catch (error) {

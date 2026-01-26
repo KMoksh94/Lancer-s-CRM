@@ -59,8 +59,7 @@ router.post("/forgotPassword",async(req,res)=>{
   checkEmail.resetPasswordToken = token
   checkEmail.resetPasswordExpiry = Date.now() + 15*60*1000
   await checkEmail.save()
-  const url = cloudinaryCall()
-  console.log(url);
+  const url = await cloudinaryCall()
   const msg = await transporter.sendMail({
     to :checkEmail.email,
     subject : `Request for Password Reset`,
@@ -87,7 +86,7 @@ router.post("/forgotPassword",async(req,res)=>{
       color:#1f2937;
       margin-bottom:20px;
     ">
-      <img src="${url}.png" alt="Lancer's CRM"
+      <img src=${url} alt="Lancer's CRM"
       style="
     display:block;
     margin:0 auto 20px auto;
@@ -128,7 +127,6 @@ router.post("/forgotPassword",async(req,res)=>{
   </div>
 </div>`
   })
-  console.log(`Message Sent ${msg.messageId}`);
   
   return res.status(200).json({response : `Mail sent Successfully!`})
   } catch (error) {
@@ -140,9 +138,7 @@ router.post("/forgotPassword",async(req,res)=>{
 router.post('/reset-password/:token',async(req,res)=>{
   const {token} = req.params
   const {password} = req.body
-  console.log(token,password);
   const user = await User.findOne({isDeleted : false, resetPasswordToken : token, resetPasswordExpiry : {$gte : new Date()}})
-  console.log(user);
   if(!user)return res.status(200).json({response : `Token Expired!`})
     const hashPass = await encryptPass(password)
     user.password = hashPass

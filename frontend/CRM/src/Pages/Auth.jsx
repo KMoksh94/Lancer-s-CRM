@@ -7,6 +7,7 @@ import ForgotPassModal from "../Components/ForgotPassModal";
 const Auth = ({setToken, setResetPass, resetPass}) => {
   const navigate = useNavigate()
   const [mode, setMode] = useState("login");
+  const [showPass,setShowPass] = useState(false)
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -21,10 +22,9 @@ const Auth = ({setToken, setResetPass, resetPass}) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
+    setShowPass(false)
     try {
     const response = await apiCall.post(`user/${mode === 'login'? 'login' : 'signup'}`,formData) 
-      console.log(response.data.token);
       localStorage.setItem("token",response.data.token)
       setToken(response.data.token)
       alert(response.data.response);
@@ -152,7 +152,7 @@ const Auth = ({setToken, setResetPass, resetPass}) => {
                 Password :
               </label>
               <input
-                type="password"
+                type={showPass ? 'string' : 'password'}
                 name="password"
                 id="password"
                 value={formData.password}
@@ -160,17 +160,24 @@ const Auth = ({setToken, setResetPass, resetPass}) => {
                 onChange={(e)=> handleChange(e)}
                 className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
+              <div className="flex">
+                <button 
+                type='button'
+                className="flex flex-1 justify-start text-xs text-indigo-600 mt-3"
+                onClick={()=>setShowPass(!showPass)}>
+                  <span className="text-indigo-600 hover:underline cursor-pointer">{showPass ? 'Hide Password' : 'Show Password'}</span>
+                </button>
               <button
               type="button"
-              className="flex w-full justify-end text-xs text-indigo-600 mt-3"
+              className="flex flex-1 justify-end text-xs text-indigo-600 mt-3"
               onClick={(e)=>{
-                console.log(`Forgot Password Clicked!`)
                 setResetPass(true)
               }}>
-                <span className="text-indigo-600 hover:underline cursor-pointer">
+                <span className={`text-indigo-600 hover:underline cursor-pointer ${mode === 'login' ? '' : 'hidden'}`}>
                   Forgot Password?
                 </span>
               </button>
+              </div>
             </div>
             <button
               type="submit"

@@ -18,7 +18,6 @@ const EditModal = ({setEditModal,setEditedClient,clientId,clientInfo}) => {
   const handleSubmit = async ()=> {
     try {
       const response = await apiCall.post(`/clients/edit-client/${clientId}`,editClientData)
-      console.log(response);
       alert(response.data.response)
     } catch (error) {
       console.log(error);
@@ -125,7 +124,6 @@ const EditModal = ({setEditModal,setEditedClient,clientId,clientInfo}) => {
           className="px-4 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700"
           onClick={() => {
             // do something
-            console.log(editClientData);
             handleSubmit();
             setEditModal(false);
           }}

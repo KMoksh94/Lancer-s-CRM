@@ -6,7 +6,6 @@ module.exports = async function requireLogin(req,res,next){
   const token = authorization.replace('Bearer ', "")
   try {
     const isVerfiedUser = jwt.verify(token,process.env.JWT_KEY)
-    console.log(isVerfiedUser.user);
     req.user = isVerfiedUser.user
     next()
   } catch (error) {

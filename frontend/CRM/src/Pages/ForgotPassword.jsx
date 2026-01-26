@@ -4,7 +4,6 @@ import apiCall from '../utilities/axios';
 
 const ForgotPassword = ({resetPass,setResetPass}) => {
   const {token} = useParams()
-  console.log(token);
   const [password,setPassword] = useState('')
   const navigate = useNavigate()
   const handleSubmit = async (e) => {

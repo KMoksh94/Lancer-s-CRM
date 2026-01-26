@@ -16,13 +16,11 @@ const Dashboard = ({token,setToken}) => {
   const [clientId,setClientId] = useState(null)
   const [projectId,setProjectId] = useState(null)
   const [collapse,setCollapse] = useState(false)
-  console.log("Dashboard rendered, loadingUser =", loadingUser);
 
   useEffect(()=>{
      const fetchUser = async() => { 
      try {
       const response = await apiCall.get('user/getUser')
-      console.log(`This is the response`, response.data.response);
       setUser(response.data.response)
       
      } catch (error) {

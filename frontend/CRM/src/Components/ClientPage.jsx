@@ -16,7 +16,6 @@ const ClientPage = ({setCurrentTab,setClientId}) => {
   const fetchClients = async ()=> {
     try {
     const response = await apiCall.get('/clients/all-clients')
-    console.log(response.data.clients);
     setClientList(response.data.clients)
     setSearchClient(response.data.clients)  
     } catch (error) {
@@ -53,7 +52,7 @@ const ClientPage = ({setCurrentTab,setClientId}) => {
           name='searchClient'
           id='searchClient'
           placeholder='Search Clients...'
-          onChange={(e)=>{console.log(e.target.value)
+          onChange={(e)=>{
             setSearchClient(clientList.filter(client => client?.name.includes(e.target.value)))
           }} />
         </div>

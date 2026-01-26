@@ -22,7 +22,6 @@ const MainDashboardPage = ({setClientId,setProjectId,setCurrentTab}) => {
   const topSectionDataFetch = async()=>{
     const response = await apiCall.get(`/projects/top-data`)
     response.data.response = undefined
-    console.log(response);
     setTopData(response.data)
   }
 
@@ -43,9 +42,7 @@ const MainDashboardPage = ({setClientId,setProjectId,setCurrentTab}) => {
   const barChartDataFetch = async(months)=>{
     const response = await apiCall.get(`/projects/dashboard-charts-data/bar/${months}`)
     const data = response.data.projects
-    console.log(data);
     const monthOrder = getMonthsList(months)
-    console.log(monthOrder);
     const monthMap = {}
     monthOrder.forEach(m=>{
       monthMap[m.key] ={
@@ -63,7 +60,6 @@ const MainDashboardPage = ({setClientId,setProjectId,setCurrentTab}) => {
         monthMap[key].Amount += project.amount/100
       }
     })
-      console.log(monthMap);
       setChartData(Object.values(monthMap))
   }
 
@@ -90,7 +86,6 @@ const MainDashboardPage = ({setClientId,setProjectId,setCurrentTab}) => {
       const statusVal = project?.status === 'Active' ? "active" : project?.status === 'Overdue' ? "overdue" : "completed"
       statusData[statusVal].Quantity++
     })
-    console.log(Object.values(statusData));
     setPieChartData(Object.values(statusData))
   }
 
