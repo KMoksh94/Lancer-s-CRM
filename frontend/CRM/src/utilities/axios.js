@@ -1,7 +1,7 @@
 import axios from "axios"
 
 const apiCall = axios.create({
-  baseURL : `https://lancer-s-crm-backend.onrender.com`
+  baseURL : `https://lancer-s-crm-backend.onrender.com/`
 })
 
 apiCall.interceptors.request.use((config) => {
