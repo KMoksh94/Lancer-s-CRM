@@ -3,7 +3,7 @@ import './App.css'
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
 import Auth from './Pages/Auth'
 import Dashboard from './Pages/Dashboard'
-import Loader from './Components/loader'
+import Loader from './Components/Loader'
 import ForgotPassword from './Pages/ForgotPassword'
 
 function App() {
