@@ -14,6 +14,7 @@ const ForgotPassword = ({resetPass,setResetPass}) => {
     alert(response.data.response)
     } catch (error) {
       console.log(error);
+      alert(error.data.response)
     }
   }
 

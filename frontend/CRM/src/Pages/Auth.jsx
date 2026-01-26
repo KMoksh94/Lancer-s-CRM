@@ -42,7 +42,7 @@ const Auth = ({setToken, setResetPass, resetPass}) => {
       email: "",
       password: "",
       })
-      alert(`Failed to ${mode === 'login' ? 'login' : 'signup'}. ${error}`)
+      alert(`Failed to ${mode === 'login' ? 'login' : 'signup'}. ${error.data.response}`)
     }
   };
   return (
