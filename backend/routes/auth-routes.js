@@ -61,9 +61,10 @@ router.post("/forgotPassword",async(req,res)=>{
   checkEmail.resetPasswordExpiry = Date.now() + 15*60*1000
   await checkEmail.save()
   const url = await cloudinaryCall()
+  // console.log(checkEmail,url, `Api key`,process.env.RESEND_API_KEY);
   const resend = new Resend(process.env.RESEND_API_KEY)
-  await resend.emails.send({
-    from : process.env.EMAIL,
+  const sentMail = await resend.emails.send({
+    from : 'onboarding@resend.dev',
     to : checkEmail.email,
     subject : `Request for Password Reset`,
     html :`<div style="
@@ -130,6 +131,8 @@ router.post("/forgotPassword",async(req,res)=>{
   </div>
 </div>`
   })
+  console.log(`resend response`, sentMail);
+  
   // LEAVING THIS HERE AS AN EXAMPLE OF NODEMAILER USECASE...
   // const msg = await transporter.sendMail({
   //   to :checkEmail.email,
@@ -137,7 +140,7 @@ router.post("/forgotPassword",async(req,res)=>{
   //   html :`Leaving this here...`
   // })
   
-  return res.status(200).json({response : `Mail sent Successfully!`})
+  return res.status(200).json({response : `Mail sent Successfully!`, mail : sentMail})
   } catch (error) {
     console.log(error);
     return res.status(500).json({response : `Server Error`})
