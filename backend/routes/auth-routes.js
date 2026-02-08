@@ -61,7 +61,7 @@ router.post("/forgotPassword",async(req,res)=>{
   checkEmail.resetPasswordExpiry = Date.now() + 15*60*1000
   await checkEmail.save()
   const url = await cloudinaryCall()
-  const resend = new Resend(process.env.RESNED_API_KEY)
+  const resend = new Resend(process.env.RESEND_API_KEY)
   await resend.emails.send({
     from : process.env.EMAIL,
     to : checkEmail.email,
