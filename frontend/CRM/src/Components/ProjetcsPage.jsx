@@ -85,7 +85,7 @@ const ProjetcsPage = ({setProjectId,setCurrentTab}) => {
           </button>
         </div>
       </div>
-      <div className="w-full px-5 sm:px-10 py-5">
+      <div className="w-full px-5 md:px-10 py-5">
   <div className="overflow-x-auto bg-white rounded-lg shadow">
     <table className="w-full border-collapse">
 
