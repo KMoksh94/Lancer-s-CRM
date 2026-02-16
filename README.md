@@ -2,7 +2,7 @@
 
 Lancer’s CRM is a **mini Customer Relationship Management (CRM) system built specifically for individual freelancers** who want a focused, no‑nonsense way to manage clients, projects, and follow‑ups.
 
-This project is designed as a **portfolio‑grade full‑stack MERN application**, built from a developer’s perspective to practice and demonstrate real‑world backend logic such as authentication flows, email‑based password recovery, cron jobs, and clean API architecture — without introducing multi‑user teams or role‑based complexity.
+This project is designed as a **full‑stack MERN application**, built from a developer’s perspective to practice and demonstrate real‑world backend logic such as authentication flows, email‑based password recovery, cron jobs, and clean API architecture — without introducing multi‑user teams or role‑based complexity.
 
 ---
 
