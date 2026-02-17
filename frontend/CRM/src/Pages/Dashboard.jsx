@@ -9,6 +9,7 @@ import MainDashboardPage from '../Components/MainDashboardPage'
 import ProjetcsPage from '../Components/ProjetcsPage'
 import ClientDetails from '../Components/ClientDetails'
 import ProjectDetails from '../Components/ProjectDetails'
+import { useIsMobile } from '../utilities/useIsMobile'
 const Dashboard = ({token,setToken}) => {
   const [currentTab,setCurrentTab] = useState('Dashboard')
   const [user,setUser] = useState(null)
@@ -16,6 +17,7 @@ const Dashboard = ({token,setToken}) => {
   const [clientId,setClientId] = useState(null)
   const [projectId,setProjectId] = useState(null)
   const [collapse,setCollapse] = useState(false)
+  const isMobile = useIsMobile()
 
   useEffect(()=>{
      const fetchUser = async() => { 
@@ -32,10 +34,12 @@ const Dashboard = ({token,setToken}) => {
   },[token])
  
   useEffect(()=>{
+    console.log(isMobile);
+    if(!isMobile) return
     const handleScroll = ()=>setCollapse(true)
     window.addEventListener('scroll',handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
-  },[])
+  },[isMobile,collapse])
 
   return (
     <>
