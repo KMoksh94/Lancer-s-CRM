@@ -71,7 +71,13 @@ return res.status(400).json({response : `Kindly provide the required fields!`})
     pushData.status = status || 'Active'
     if(dueDate){pushData.dueDate=new Date(dueDate)}
     if(paymentStatus){pushData.paymentStatus = paymentStatus}
-    if(paymentDate!="" || paymentDate != null || paymentDate != undefined){pushData.paymentDate = new Date(paymentDate)}else{pushData.paymentDate = null}
+    
+    if (paymentStatus === "Paid" && paymentDate) {
+    pushData.paymentDate = new Date(paymentDate)
+    } else {
+    pushData.paymentDate = null
+    }
+    
     if(description){pushData.description = description}
     if(amount!== undefined){pushData.amount = amount}
     pushData.user = req.user._id
