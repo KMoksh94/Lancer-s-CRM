@@ -19,8 +19,7 @@ const AddProjectModal = ({setOpenAddModal, setNewProjectCreated,
   })
 
   const [editProjectData,setEditProjectData] = useState({})
-  console.log(projectInfo);
-  
+
   useEffect(()=>{
     editModal ? setPaymentStatus(projectInfo?.paymentStatus) : ''
     editModal ? setStatus(projectInfo?.status) : ''
@@ -121,7 +120,7 @@ const AddProjectModal = ({setOpenAddModal, setNewProjectCreated,
       </label>
       <select className="w-full border rounded-lg px-3 py-2" 
       onChange={(e)=>handleChange(e)} name='clientName'
-      value={!editModal ? "" : editProjectData?.clientName?._id}>
+      value={!editModal ? newProjectData?.clientName : editProjectData?.clientName?._id}>
         <option value="">--Select Client--</option>
         {clientOptions.length > 0 ? clientOptions.map(client=>{return(
           <option key={client._id} value={client._id}>{client.name}</option>
@@ -154,7 +153,7 @@ const AddProjectModal = ({setOpenAddModal, setNewProjectCreated,
         type="number"
         name='amount'
         id='amount'
-        value={editModal ? editProjectData?.amount/100 : newProjectData?.amount}
+        value={editModal ? editProjectData?.amount/100 : newProjectData?.amount/100}
         required
         className="w-full border rounded-lg px-3 py-2"
         placeholder="Enter amount"
