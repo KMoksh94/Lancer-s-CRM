@@ -19,7 +19,8 @@ const AddProjectModal = ({setOpenAddModal, setNewProjectCreated,
   })
 
   const [editProjectData,setEditProjectData] = useState({})
-
+  console.log(projectInfo);
+  
   useEffect(()=>{
     editModal ? setPaymentStatus(projectInfo?.paymentStatus) : ''
     editModal ? setStatus(projectInfo?.status) : ''

@@ -45,7 +45,7 @@ const Dashboard = ({token,setToken}) => {
     <>
     {loadingUser ? <Loader></Loader> : 
     <div className='bg-gray-100 flex flex-col md:flex-row'>
-      <Navbar currentTab = {currentTab} setCurrentTab = {setCurrentTab} collapse={collapse} setCollapse={setCollapse}></Navbar>
+      <Navbar currentTab = {currentTab} setCurrentTab = {setCurrentTab} collapse={collapse} setCollapse={setCollapse} isMobile={isMobile}></Navbar>
       <div className='w-full flex flex-col'
       onScroll={()=>{setCollapse(false)}}>
       <Topbar currentTab={currentTab} user={user} setUser={setUser} setToken={setToken}></Topbar>
