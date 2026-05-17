@@ -9,7 +9,7 @@ const ForgotPassword = ({resetPass,setResetPass}) => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      const response = await apiCall.post(`/user/reset-password/${token}`,{password})
+      const response = await apiCall.post(`user/reset-password/${token}`,{password})
     navigate('/auth')
     alert(response.data.response)
     } catch (error) {
