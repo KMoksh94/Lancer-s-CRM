@@ -60,6 +60,7 @@ const MainDashboardPage = ({setClientId,setProjectId,setCurrentTab}) => {
         monthMap[key].Amount += project.amount/100
       }
     })
+      
       setChartData(Object.values(monthMap))
   }
 
@@ -104,6 +105,7 @@ const MainDashboardPage = ({setClientId,setProjectId,setCurrentTab}) => {
     barChartDataFetch("6")
     pieChartDataFetch("6")
   },[])
+
 
   return (
   <div className='w-full px-5 md:px-15 py-4'>

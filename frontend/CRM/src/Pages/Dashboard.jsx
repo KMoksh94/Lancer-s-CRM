@@ -9,6 +9,7 @@ import MainDashboardPage from '../Components/MainDashboardPage'
 import ProjetcsPage from '../Components/ProjetcsPage'
 import ClientDetails from '../Components/ClientDetails'
 import ProjectDetails from '../Components/ProjectDetails'
+import { useIsMobile } from '../utilities/useIsMobile'
 const Dashboard = ({token,setToken}) => {
   const [currentTab,setCurrentTab] = useState('Dashboard')
   const [user,setUser] = useState(null)
@@ -16,6 +17,7 @@ const Dashboard = ({token,setToken}) => {
   const [clientId,setClientId] = useState(null)
   const [projectId,setProjectId] = useState(null)
   const [collapse,setCollapse] = useState(false)
+  const isMobile = useIsMobile()
 
   useEffect(()=>{
      const fetchUser = async() => { 
@@ -32,16 +34,18 @@ const Dashboard = ({token,setToken}) => {
   },[token])
  
   useEffect(()=>{
+    console.log(isMobile);
+    if(!isMobile) return
     const handleScroll = ()=>setCollapse(true)
     window.addEventListener('scroll',handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
-  },[])
+  },[isMobile,collapse])
 
   return (
     <>
     {loadingUser ? <Loader></Loader> : 
     <div className='bg-gray-100 flex flex-col md:flex-row'>
-      <Navbar currentTab = {currentTab} setCurrentTab = {setCurrentTab} collapse={collapse} setCollapse={setCollapse}></Navbar>
+      <Navbar currentTab = {currentTab} setCurrentTab = {setCurrentTab} collapse={collapse} setCollapse={setCollapse} isMobile={isMobile}></Navbar>
       <div className='w-full flex flex-col'
       onScroll={()=>{setCollapse(false)}}>
       <Topbar currentTab={currentTab} user={user} setUser={setUser} setToken={setToken}></Topbar>

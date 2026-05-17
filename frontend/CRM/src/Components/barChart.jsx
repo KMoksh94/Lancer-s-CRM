@@ -48,7 +48,7 @@ const data = [
 ];
 
 // #endregion
-const SimpleBarChart = ({chartData}) => {
+const SimpleBarChart = ({chartData}) => {  
   return (
     <BarChart
       style={{ width: '100%', maxWidth: '700px', maxHeight: '70vh', aspectRatio: 1.618 }}

@@ -6,6 +6,7 @@ const User = require('../database-connection/user-model.js');
 const requireLogin = require('../middlewares/requireLogin.js');
 const transporter = require('../utilities/nodemailer.js');
 const cloudinaryCall = require('../utilities/cloudinary.js');
+const {Resend} = require('resend')
 
 router.post('/signup', async (req,res)=>{
 try {
@@ -60,8 +61,10 @@ router.post("/forgotPassword",async(req,res)=>{
   checkEmail.resetPasswordExpiry = Date.now() + 15*60*1000
   await checkEmail.save()
   const url = await cloudinaryCall()
-  const msg = await transporter.sendMail({
-    to :checkEmail.email,
+  const resend = new Resend(process.env.RESEND_API_KEY)
+  const sentMail = await resend.emails.send({
+    from : 'no-reply@kmoksh.in',
+    to : checkEmail.email,
     subject : `Request for Password Reset`,
     html :`<div style="
   background:#fdfaf4;
@@ -128,7 +131,14 @@ router.post("/forgotPassword",async(req,res)=>{
 </div>`
   })
   
-  return res.status(200).json({response : `Mail sent Successfully!`})
+  // LEAVING THIS HERE AS AN EXAMPLE OF NODEMAILER USECASE...
+  // const msg = await transporter.sendMail({
+  //   to :checkEmail.email,
+  //   subject : `Request for Password Reset`,
+  //   html :`Leaving this here...`
+  // })
+  
+  return res.status(200).json({response : `Mail sent Successfully!`, mail : sentMail})
   } catch (error) {
     console.log(error);
     return res.status(500).json({response : `Server Error`})
